@@ -11,7 +11,7 @@
 - Confirmar que corresponde al repositorio del equipo exigido por el enunciado.
 - PR utilizado: https://github.com/meledpeca93/Tarea2.5-Volley-OkHttp-Retrofit/pull/3
 - PR #3 integrado en main; revisión de otro integrante no acreditada.
-- Nuevo PR de continuación para selector, matriz de fallos y comparación: por publicar.
+- PR de entrega actual: https://github.com/meledpeca93/Tarea2.5-Volley-OkHttp-Retrofit/pull/4
 - Documento de trabajo actualizado: 12 de noviembre de 2026.
 
 Este archivo es la base del futuro PDF. Los resultados pendientes no representan
@@ -258,8 +258,9 @@ Estado actualizado al 12 de noviembre de 2026.
 - [x] Redactar recomendación final con resultados reales.
 - [x] Ordenar rama personal según el enunciado: feature/comparativa-melvin-pena.
   Se conserva el historial previo y se incorpora main sin reescribir commits.
-- [ ] Publicar y verificar commits de selector, pruebas, evidencias y documentación.
-- [ ] Abrir PR de continuación hacia main y obtener revisión real de otro integrante.
+- [x] Publicar y verificar commits de selector, pruebas, evidencias y documentación.
+- [x] Abrir PR de continuación hacia main: [PR #4](https://github.com/meledpeca93/Tarea2.5-Volley-OkHttp-Retrofit/pull/4).
+- [ ] Obtener revisión real de otro integrante antes de integrar el PR #4.
   El PR #3 anterior ya fue integrado; resolver conflictos no acredita revisión.
 - [ ] Preparar PDF individual con tabla comparativa, matriz de fallos y evidencias.
 - [ ] Grabar video individual de 3–4 minutos, cámara encendida, explicación de
@@ -315,3 +316,26 @@ logging BASIC de Retrofit en debug como límites de las mediciones.
 Ver el cuadro comparativo de este documento y el
 [conteo de líneas](evidencias/laboratorio-lineas.json).
 Próximo paso: preparar Git/PR revisado, PDF y video individual.
+
+## Publicación Git verificada — 12 de noviembre de 2026
+
+Rama: `feature/comparativa-melvin-pena`, publicada en origin sin force push.
+La rama ya existía; se actualizó con fast-forward conservando el historial.
+Los conflictos resueltos por el estudiante en el PR #3 ya estaban en main;
+se incorporaron antes de preparar los cambios nuevos.
+
+Commits de esta continuación:
+
+- `c0ff331`: selector de escenarios compartidos en laboratorio HTTP.
+- `dcee07d`: scripts, quince fallos y quince mediciones con sus evidencias.
+- `8654ba5`: cuadro comparativo, recomendación y documentación actualizada.
+
+PR abierto hacia main: [#4](https://github.com/meledpeca93/Tarea2.5-Volley-OkHttp-Retrofit/pull/4).
+El PR #3 anterior está integrado. El PR #4 queda abierto para revisión real de
+otro integrante; no se atribuye aprobación ni participación aún no realizadas.
+La actualización del enlace del PR se guarda en un commit adicional de documentación.
+
+Verificación: diff sin errores de espacios, credenciales locales ignoradas y
+ausencia de JWT completos en los archivos de texto revisados. Las pruebas Android
+y backend documentadas se conservan; no se repitieron al cambiar solo documentación.
+Pendientes de entrega: revisión del compañero, PDF y video individual.

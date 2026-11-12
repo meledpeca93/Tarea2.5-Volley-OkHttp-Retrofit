@@ -112,7 +112,7 @@ PR utilizado: [#3](https://github.com/meledpeca93/Tarea2.5-Volley-OkHttp-Retrofi
 El estudiante confirmó resolución de los cinco archivos en conflicto.
 La copia local incorporó esa resolución mediante fast-forward sin perder cambios.
 Rama de entrega: feature/comparativa-melvin-pena, conservando el historial previo.
-El PR #3 fue integrado en main; esta continuación se entrega mediante un nuevo PR.
+El PR #3 fue integrado en main; esta continuación se entrega mediante el [PR #4](https://github.com/meledpeca93/Tarea2.5-Volley-OkHttp-Retrofit/pull/4).
 La revisión real de otro integrante sigue pendiente.
 
 Para repetir la matriz, con API compilada, puerto 5000 libre, APK debug instalada
@@ -135,5 +135,28 @@ reutilizado, DTO tipados y errores centralizados. Volley tuvo el menor promedio
 observado; la conclusión distingue mantenimiento de rendimiento y declara los
 límites del listado vacío, clientes por consulta y logging debug.
 
-Pendientes actuales: verificar publicación de la rama y nuevo PR, revisión real
-de otro integrante, PDF, video individual y enlaces/archivos finales.
+Pendientes actuales: revisión real del PR #4 por otro integrante, PDF, video
+individual y enlaces/archivos finales. Rama y commits ya publicados.
+
+## Publicación Git verificada — 12 de noviembre de 2026
+
+Rama: `feature/comparativa-melvin-pena`, publicada en origin sin force push.
+La rama ya existía; se actualizó con fast-forward conservando el historial.
+Los conflictos resueltos por el estudiante en el PR #3 ya estaban en main;
+se incorporaron antes de preparar los cambios nuevos.
+
+Commits de esta continuación:
+
+- `c0ff331`: selector de escenarios compartidos en laboratorio HTTP.
+- `dcee07d`: scripts, quince fallos y quince mediciones con sus evidencias.
+- `8654ba5`: cuadro comparativo, recomendación y documentación actualizada.
+
+PR abierto hacia main: [#4](https://github.com/meledpeca93/Tarea2.5-Volley-OkHttp-Retrofit/pull/4).
+El PR #3 anterior está integrado. El PR #4 queda abierto para revisión real de
+otro integrante; no se atribuye aprobación ni participación aún no realizadas.
+La actualización del enlace del PR se guarda en un commit adicional de documentación.
+
+Verificación: diff sin errores de espacios, credenciales locales ignoradas y
+ausencia de JWT completos en los archivos de texto revisados. Las pruebas Android
+y backend documentadas se conservan; no se repitieron al cambiar solo documentación.
+Pendientes de entrega: revisión del compañero, PDF y video individual.
