@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -25,6 +27,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request as OkHttpRequest
 import okhttp3.Response as OkHttpResponse
+import com.melvinpena.comparativa.data.remote.EscenarioLaboratorio
 import com.melvinpena.comparativa.data.repository.ApiResult
 import com.melvinpena.comparativa.data.repository.RegistroRepository
 import com.melvinpena.comparativa.data.repository.RequestHandle
@@ -35,6 +38,7 @@ class ComparativaActivity : Activity() {
     private lateinit var baseUrlInput: EditText
     private lateinit var tokenInput: EditText
     private lateinit var timeoutInput: EditText
+    private lateinit var escenarioInput: Spinner
     private lateinit var resultView: TextView
     private lateinit var volleyQueue: com.android.volley.RequestQueue
 
@@ -49,16 +53,18 @@ class ComparativaActivity : Activity() {
             return false
         }
         requestInProgress = true
-        resultView.text = "Consultando con $client…"
+        setSettingsEnabled(false)
+        resultView.text = "Consultando con $client…\n${escenarioSeleccionado()}"
         return true
     }
 
     private fun publishResult(message: String, diagnostic: String) {
         if (isFinishing || isDestroyed) return
         requestInProgress = false
+        setSettingsEnabled(true)
         resultView.text = message
         // Do not log URL, headers, response body or JWT.
-        Log.i("ComparativaHTTP", "$diagnostic | $message")
+        Log.i("ComparativaHTTP", "${escenarioSeleccionado().name} | $diagnostic | $message")
     }
 
     private fun httpClient(timeout: Int) = OkHttpClient.Builder()
@@ -142,11 +148,24 @@ class ComparativaActivity : Activity() {
             it.inputType = android.text.InputType.TYPE_CLASS_NUMBER
             settingsCard.addView(it)
         }
+        settingsCard.addView(label("Escenario de la consulta"))
+        escenarioInput = Spinner(this).apply {
+            val escenarios = if (BuildConfig.DEBUG) EscenarioLaboratorio.entries.toList()
+                else listOf(EscenarioLaboratorio.NORMAL)
+            adapter = ArrayAdapter(this@ComparativaActivity,
+                android.R.layout.simple_spinner_item, escenarios).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+        }
+        settingsCard.addView(escenarioInput)
+        settingsCard.addView(UiStyle.text(this,
+            "Para probar timeout, usa una espera menor a 15000 ms. Demora y error 500 requieren la API en Development y un JWT válido.",
+            12f, UiStyle.muted))
         content.addView(settingsCard)
         content.addView(UiStyle.space(this, 22))
         content.addView(UiStyle.text(this, "Ejecuta una prueba", 18f, UiStyle.ink, true))
         content.addView(UiStyle.space(this, 4))
-        content.addView(UiStyle.text(this, "Cada cliente consultará GET /api/registros.", 13f, UiStyle.muted))
+        content.addView(UiStyle.text(this, "Los tres clientes consultarán el escenario seleccionado.", 13f, UiStyle.muted))
         content.addView(UiStyle.space(this, 12))
         content.addView(clientCard("V", "Volley", "JsonArrayRequest · cola de solicitudes", UiStyle.teal) {
             requestWithVolley()
@@ -321,7 +340,7 @@ class ComparativaActivity : Activity() {
         if (!beginRequest("Retrofit")) return
 
         val repository = RegistroRepository(baseUrl, timeout.toLong(), token)
-        activeRetrofitCall = repository.listar { result ->
+        activeRetrofitCall = repository.consultarLaboratorio(escenarioSeleccionado()) { result ->
             when (result) {
                 is ApiResult.Success -> showSuccess("Retrofit", result.value.size, startedAt)
                 is ApiResult.Failure -> {
@@ -333,9 +352,18 @@ class ComparativaActivity : Activity() {
         }
     }
 
+    private fun escenarioSeleccionado() = escenarioInput.selectedItem as EscenarioLaboratorio
+
+    private fun setSettingsEnabled(enabled: Boolean) {
+        baseUrlInput.isEnabled = enabled
+        tokenInput.isEnabled = enabled
+        timeoutInput.isEnabled = enabled
+        escenarioInput.isEnabled = enabled
+    }
+
     private fun requestUrl(): String? {
         val baseUrl = baseUrl() ?: return null
-        return "${baseUrl}api/registros"
+        return "$baseUrl${escenarioSeleccionado().ruta}"
     }
 
     private fun baseUrl(): String? {

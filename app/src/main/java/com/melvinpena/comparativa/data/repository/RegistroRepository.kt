@@ -26,6 +26,13 @@ class RegistroRepository(
             if (it.startsWith("Bearer ", true)) it else "Bearer $it"
         }
     fun listar(done: (ApiResult<List<RegistroResumen>>) -> Unit) = execute(api.listar(authorization), done)
+    fun consultarLaboratorio(escenario: EscenarioLaboratorio, done: (ApiResult<List<RegistroResumen>>) -> Unit): RequestHandle {
+        require(BuildConfig.DEBUG || escenario == EscenarioLaboratorio.NORMAL) {
+            "Los escenarios de fallo solo están disponibles en debug."
+        }
+        return if (escenario == EscenarioLaboratorio.NORMAL) listar(done)
+        else execute(api.consultarLaboratorio(escenario.ruta, authorization), done)
+    }
     fun consultar(id: Int, done: (ApiResult<RegistroDetalle>) -> Unit) = execute(api.consultar(id, authorization), done)
     fun crear(input: RegistroInput, done: (ApiResult<RegistroDetalle>) -> Unit) = execute(api.crear(input, authorization), done)
     fun actualizar(id: Int, input: RegistroInput, done: (ApiResult<RegistroDetalle>) -> Unit) = execute(api.actualizar(id, input, authorization), done)
