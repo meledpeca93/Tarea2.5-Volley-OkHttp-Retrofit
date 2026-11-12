@@ -19,6 +19,10 @@ class MainActivity : Activity() {
         window.navigationBarColor = UiStyle.canvas
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+    }
+
+    override fun onResume() {
+        super.onResume()
         setContentView(createHome())
     }
 
@@ -100,6 +104,20 @@ class MainActivity : Activity() {
             startActivity(Intent(this, ComparativaActivity::class.java))
         }
         hero.addView(startButton)
+        hero.addView(UiStyle.space(this, 12))
+        val session = com.melvinpena.comparativa.data.remote.AuthSession
+        hero.addView(UiStyle.button(this, if (session.accessToken == null) "Iniciar sesión" else "Cerrar sesión (${session.username})", UiStyle.teal, Color.WHITE) {
+            if (session.accessToken == null) {
+                startActivity(Intent(this, com.melvinpena.comparativa.ui.LoginActivity::class.java))
+            } else {
+                session.clear()
+                setContentView(createHome())
+            }
+        })
+        hero.addView(UiStyle.space(this, 12))
+        hero.addView(UiStyle.button(this, "Abrir bitácora de campo", UiStyle.teal, Color.WHITE) {
+            startActivity(Intent(this, com.melvinpena.comparativa.ui.BitacoraActivity::class.java))
+        })
         content.addView(hero)
 
         content.addView(UiStyle.space(this, 26))

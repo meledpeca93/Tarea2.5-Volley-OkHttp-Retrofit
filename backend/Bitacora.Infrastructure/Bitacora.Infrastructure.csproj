@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup>
+<ItemGroup><ProjectReference Include="../Bitacora.Domain/Bitacora.Domain.csproj" /><ProjectReference Include="../Bitacora.Application/Bitacora.Application.csproj" /><PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.14" /></ItemGroup>
+</Project>

@@ -1,0 +1,138 @@
+No authorization data found. Please use the `postman login` command.
+Refer:https://learning.postman.com/docs/postman-cli/postman-cli-options/#postman-login
+
+Running your collection...
+postman
+
+Bitácora — Tarea 2.2
+
+Root Login de laboratorio
+
+  POST http://localhost:5000/api/auth/login [200 OK, 609 B, 63 ms]
+  Pass  Login HTTP 200
+
+Root Crear registro válido
+
+  POST http://localhost:5000/api/registros [201 Created, 348 B, 115 ms]
+  Pass  HTTP 201
+  Pass  Location apunta al recurso
+  Pass  Fecha del servidor
+
+Root Listar sin fotografías
+
+  GET http://localhost:5000/api/registros [200 OK, 271 B, 14 ms]
+  Pass  HTTP 200
+  Pass  Arreglo de registros sin foto
+
+Root Listado con formato no admitido
+
+  GET http://localhost:5000/api/registros [406 Not Acceptable, 104 B, 2 ms]
+  Pass  HTTP 406
+
+Root Consultar detalle
+
+  GET http://localhost:5000/api/registros/7 [200 OK, 293 B, 35 ms]
+  Pass  HTTP 200
+  Pass  Incluye foto
+
+Root Consultar inexistente
+
+  GET http://localhost:5000/api/registros/2147483647 [404 Not Found, 317 B, 3 ms]
+  Pass  HTTP 404
+
+Root Crear con título corto
+
+  POST http://localhost:5000/api/registros [400 Bad Request, 463 B, 6 ms]
+  Pass  HTTP 400
+  Pass  Errores por campo
+
+Root Crear sin descripción
+
+  POST http://localhost:5000/api/registros [400 Bad Request, 413 B, 2 ms]
+  Pass  HTTP 400
+
+Root Crear con título largo
+
+  POST http://localhost:5000/api/registros [400 Bad Request, 463 B, 2 ms]
+  Pass  HTTP 400
+
+Root Crear con descripción larga
+
+  POST http://localhost:5000/api/registros [400 Bad Request, 447 B, 2 ms]
+  Pass  HTTP 400
+
+Root Crear con Base64 inválido
+
+  POST http://localhost:5000/api/registros [400 Bad Request, 429 B, 3 ms]
+  Pass  HTTP 400
+
+Root Actualizar válido
+
+  PUT http://localhost:5000/api/registros/7 [200 OK, 296 B, 10 ms]
+  Pass  HTTP 200
+  Pass  Título actualizado
+
+Root Actualizar inválido
+
+  PUT http://localhost:5000/api/registros/7 [400 Bad Request, 495 B, 2 ms]
+  Pass  HTTP 400
+
+Root Actualizar inexistente
+
+  PUT http://localhost:5000/api/registros/2147483647 [404 Not Found, 317 B, 2 ms]
+  Pass  HTTP 404
+
+Root Eliminar existente
+
+  DELETE http://localhost:5000/api/registros/7 [204 No Content, 81 B, 12 ms]
+  Pass  HTTP 204
+  Pass  Sin cuerpo
+
+Root Eliminar inexistente
+
+  DELETE http://localhost:5000/api/registros/7 [404 Not Found, 317 B, 2 ms]
+  Pass  HTTP 404
+
+Root Confirmar eliminación
+
+  GET http://localhost:5000/api/registros/7 [404 Not Found, 317 B, 1 ms]
+  Pass  HTTP 404
+
+Root Error interno controlado (solo Development)
+
+  GET http://localhost:5000/api/pruebas/error [500 Internal Server Error, 358 B, 6 ms]
+  Pass  HTTP 500
+  Pass  ProblemDetails sin detalle interno
+
+Root Listado sin JWT devuelve 401
+
+  GET http://localhost:5000/api/registros [401 Unauthorized, 357 B, 2 ms]
+  Pass  HTTP 401 sin JWT
+  Pass  Desafío Bearer
+
+Root Login incorrecto
+
+  POST http://localhost:5000/api/auth/login [401 Unauthorized, 378 B, 45 ms]
+  Pass  HTTP 401 credenciales inválidas
+
+----------------------------------------------------------------------
+|                         |            executed |             failed |
+--------------------------+---------------------+---------------------
+|              iterations |                   1 |                  0 |
+--------------------------+---------------------+---------------------
+|                requests |                  20 |                  0 |
+--------------------------+---------------------+---------------------
+|            test-scripts |                  20 |                  0 |
+--------------------------+---------------------+---------------------
+|      prerequest-scripts |                   0 |                  0 |
+--------------------------+---------------------+---------------------
+|              assertions |                  29 |                  0 |
+----------------------------------------------------------------------
+| total run duration: 540 ms                                         |
+----------------------------------------------------------------------
+| total data received: 3.81 KB (approx)                              |
+----------------------------------------------------------------------
+| average response time: 16 ms [min: 1 ms, max: 115 ms, s.d.: 27 ms] |
+----------------------------------------------------------------------
+Postman credentials are required for publishing run details to Postman cloud.
+Please specify it by using the `postman login` command

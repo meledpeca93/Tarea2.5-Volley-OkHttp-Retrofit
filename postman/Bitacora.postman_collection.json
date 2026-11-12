@@ -1,0 +1,572 @@
+{
+  "info": {
+    "name": "Bitácora — Tarea 2.2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Contrato: controladores y DTO de backend; OpenAPI exportado en backend/openapi.json. Ejecutar en orden contra base de pruebas. Login de laboratorio solo Development; suministrar username y password desde entorno privado no versionado. No guardar accessToken real en el archivo exportado."
+  },
+  "variable": [
+    {
+      "key": "registroId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Login de laboratorio",
+      "request": {
+        "method": "POST",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\": \"{{username}}\", \"password\": \"{{password}}\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Login HTTP 200\", () => pm.response.to.have.status(200));",
+              "if (pm.response.code === 200) pm.collectionVariables.set(\"accessToken\", pm.response.json().accessToken);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Crear registro válido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/registros",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"titulo\": \"Registro de campo\", \"descripcion\": \"Observaci\\u00f3n de prueba\", \"fotoBase64\": \"aG9sYQ==\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+              "const r = pm.response.json(); pm.collectionVariables.set(\"registroId\", r.id);",
+              "pm.test(\"Location apunta al recurso\", () => pm.expect(pm.response.headers.get(\"Location\")).to.include(\"/api/registros/\" + r.id));",
+              "pm.test(\"Fecha del servidor\", () => pm.expect(Date.parse(r.fechaCreacion)).to.be.a(\"number\").and.not.NaN);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Listar sin fotografías",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/registros"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Arreglo de registros sin foto\", () => { const rows = pm.response.json(); pm.expect(rows).to.be.an(\"array\"); rows.forEach(r => pm.expect(r).not.to.have.property(\"fotoBase64\")); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Listado con formato no admitido",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/xml"
+          }
+        ],
+        "url": "{{baseUrl}}/api/registros"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 406\", () => pm.response.to.have.status(406));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Consultar detalle",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/registros/{{registroId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Incluye foto\", () => pm.expect(pm.response.json().fotoBase64).to.eql(\"aG9sYQ==\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Consultar inexistente",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/registros/2147483647"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Crear con título corto",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/registros",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"titulo\": \"ab\", \"descripcion\": \"Observaci\\u00f3n de prueba\", \"fotoBase64\": \"aG9sYQ==\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Errores por campo\", () => pm.expect(pm.response.json()).to.have.property(\"errors\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Crear sin descripción",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/registros",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"titulo\": \"Registro de campo\", \"descripcion\": \"\", \"fotoBase64\": \"aG9sYQ==\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Crear con título largo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/registros",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"titulo\": \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\", \"descripcion\": \"Observaci\\u00f3n de prueba\", \"fotoBase64\": \"aG9sYQ==\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Crear con descripción larga",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/registros",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"titulo\": \"Registro de campo\", \"descripcion\": \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\", \"fotoBase64\": \"aG9sYQ==\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Crear con Base64 inválido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/registros",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"titulo\": \"Registro de campo\", \"descripcion\": \"Observaci\\u00f3n de prueba\", \"fotoBase64\": \"no-es-base64!\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Actualizar válido",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/registros/{{registroId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"titulo\": \"Registro actualizado\", \"descripcion\": \"Observaci\\u00f3n de prueba\", \"fotoBase64\": \"aG9sYQ==\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Título actualizado\", () => pm.expect(pm.response.json().titulo).to.eql(\"Registro actualizado\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Actualizar inválido",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/registros/{{registroId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"titulo\": \"\", \"descripcion\": \"Observaci\\u00f3n de prueba\", \"fotoBase64\": \"aG9sYQ==\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Actualizar inexistente",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/registros/2147483647",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"titulo\": \"Registro de campo\", \"descripcion\": \"Observaci\\u00f3n de prueba\", \"fotoBase64\": \"aG9sYQ==\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Eliminar existente",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/registros/{{registroId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", () => pm.response.to.have.status(204));",
+              "pm.test(\"Sin cuerpo\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Eliminar inexistente",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/registros/{{registroId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Confirmar eliminación",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/registros/{{registroId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Error interno controlado (solo Development)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/pruebas/error"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 500\", () => pm.response.to.have.status(500));",
+              "pm.test(\"ProblemDetails sin detalle interno\", () => { const r = pm.response.json(); pm.expect(r.status).to.eql(500); pm.expect(r).to.have.property(\"traceId\"); pm.expect(JSON.stringify(r)).not.to.include(\"InvalidOperationException\"); pm.expect(JSON.stringify(r)).not.to.include(\"Fallo de prueba controlado\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Listado sin JWT devuelve 401",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": "{{baseUrl}}/api/registros"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 401 sin JWT\", () => pm.response.to.have.status(401));",
+              "pm.test(\"Desafío Bearer\", () => pm.expect(pm.response.headers.get(\"WWW-Authenticate\")).to.include(\"Bearer\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Login incorrecto",
+      "request": {
+        "method": "POST",
+        "auth": {
+          "type": "noauth"
+        },
+        "url": "{{baseUrl}}/api/auth/login",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\": \"{{username}}\", \"password\": \"incorrecta-para-prueba\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 401 credenciales inválidas\", () => pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  }
+}

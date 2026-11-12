@@ -1,0 +1,6 @@
+PASS: JWT de sesión Android en Volley: 0 registros recibidos en 20 ms.
+PASS: JWT de sesión Android en OkHttp: 0 registros recibidos en 39 ms.
+PASS: JWT de sesión Android en Retrofit: 0 registros recibidos en 42 ms.
+PASS: encabezado ausente en Volley: Token ausente, inválido o vencido (401). (14 ms).
+PASS: encabezado ausente en OkHttp: Token ausente, inválido o vencido (401). (42 ms).
+PASS: encabezado ausente en Retrofit: Token ausente, inválido o vencido (401). (39 ms).

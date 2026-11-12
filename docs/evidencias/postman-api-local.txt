@@ -1,0 +1,122 @@
+No authorization data found. Please use the `postman login` command.
+Refer:https://learning.postman.com/docs/postman-cli/postman-cli-options/#postman-login
+
+Running your collection...
+postman
+
+Bitácora — Tarea 2.2
+
+Root Crear registro válido
+
+  POST http://localhost:5000/api/registros [201 Created, 348 B, 15 ms]
+  Pass  HTTP 201
+  Pass  Location apunta al recurso
+  Pass  Fecha del servidor
+
+Root Listar sin fotografías
+
+  GET http://localhost:5000/api/registros [200 OK, 271 B, 2 ms]
+  Pass  HTTP 200
+  Pass  Arreglo de registros sin foto
+
+Root Listado con formato no admitido
+
+  GET http://localhost:5000/api/registros [406 Not Acceptable, 104 B, 2 ms]
+  Pass  HTTP 406
+
+Root Consultar detalle
+
+  GET http://localhost:5000/api/registros/2 [200 OK, 293 B, 2 ms]
+  Pass  HTTP 200
+  Pass  Incluye foto
+
+Root Consultar inexistente
+
+  GET http://localhost:5000/api/registros/2147483647 [404 Not Found, 317 B, 2 ms]
+  Pass  HTTP 404
+
+Root Crear con título corto
+
+  POST http://localhost:5000/api/registros [400 Bad Request, 463 B, 1 ms]
+  Pass  HTTP 400
+  Pass  Errores por campo
+
+Root Crear sin descripción
+
+  POST http://localhost:5000/api/registros [400 Bad Request, 413 B, 1 ms]
+  Pass  HTTP 400
+
+Root Crear con título largo
+
+  POST http://localhost:5000/api/registros [400 Bad Request, 463 B, 2 ms]
+  Pass  HTTP 400
+
+Root Crear con descripción larga
+
+  POST http://localhost:5000/api/registros [400 Bad Request, 447 B, 2 ms]
+  Pass  HTTP 400
+
+Root Crear con Base64 inválido
+
+  POST http://localhost:5000/api/registros [400 Bad Request, 429 B, 2 ms]
+  Pass  HTTP 400
+
+Root Actualizar válido
+
+  PUT http://localhost:5000/api/registros/2 [200 OK, 296 B, 3 ms]
+  Pass  HTTP 200
+  Pass  Título actualizado
+
+Root Actualizar inválido
+
+  PUT http://localhost:5000/api/registros/2 [400 Bad Request, 495 B, 1 ms]
+  Pass  HTTP 400
+
+Root Actualizar inexistente
+
+  PUT http://localhost:5000/api/registros/2147483647 [404 Not Found, 317 B, 1 ms]
+  Pass  HTTP 404
+
+Root Eliminar existente
+
+  DELETE http://localhost:5000/api/registros/2 [204 No Content, 81 B, 3 ms]
+  Pass  HTTP 204
+  Pass  Sin cuerpo
+
+Root Eliminar inexistente
+
+  DELETE http://localhost:5000/api/registros/2 [404 Not Found, 317 B, 1 ms]
+  Pass  HTTP 404
+
+Root Confirmar eliminación
+
+  GET http://localhost:5000/api/registros/2 [404 Not Found, 317 B, 1 ms]
+  Pass  HTTP 404
+
+Root Error interno controlado (solo Development)
+
+  GET http://localhost:5000/api/pruebas/error [500 Internal Server Error, 358 B, 10 ms]
+  Pass  HTTP 500
+  Pass  ProblemDetails sin detalle interno
+
+-------------------------------------------------------------------
+|                         |          executed |            failed |
+--------------------------+-------------------+--------------------
+|              iterations |                 1 |                 0 |
+--------------------------+-------------------+--------------------
+|                requests |                17 |                 0 |
+--------------------------+-------------------+--------------------
+|            test-scripts |                17 |                 0 |
+--------------------------+-------------------+--------------------
+|      prerequest-scripts |                 0 |                 0 |
+--------------------------+-------------------+--------------------
+|              assertions |                25 |                 0 |
+-------------------------------------------------------------------
+| total run duration: 221 ms                                      |
+-------------------------------------------------------------------
+| total data received: 3.04 KB (approx)                           |
+-------------------------------------------------------------------
+| average response time: 3 ms [min: 1 ms, max: 15 ms, s.d.: 3 ms] |
+-------------------------------------------------------------------
+Postman credentials are required for publishing run details to Postman cloud.
+Please specify it by using the `postman login` command

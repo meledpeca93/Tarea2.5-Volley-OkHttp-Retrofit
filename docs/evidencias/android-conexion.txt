@@ -1,0 +1,3 @@
+PASS: desconexión del emulador muestra Reintentar y mantiene la app abierta.
+Mensaje visible: Bitácora de campo | Registros del servidor | Sin conexión con la API. Revisa la red y el servidor. | Reintentar | Actualizar | Nuevo registro | Volver al inicio
+PASS: conexión restaurada y listado recuperado.

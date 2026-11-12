@@ -4,3 +4,21 @@
 /.idea/
 *.iml
 **/build/
+
+# .NET / local databases
+**/bin/
+**/obj/
+*.db
+*.db-shm
+*.db-wal
+
+# Python smoke test cache
+**/__pycache__/
+*.pyc
+
+/docs/evidencias/api-desarrollo.log
+
+# Local development credentials and signing keys
+**/.dev-auth.json
+**/.dev-login.json
+postman/Local.private.postman_environment.json
