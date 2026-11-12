@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -20,12 +21,13 @@ import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import okhttp3.Call as OkHttpCall
 import okhttp3.Callback as OkHttpCallback
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request as OkHttpRequest
 import okhttp3.Response as OkHttpResponse
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.melvinpena.comparativa.data.repository.ApiResult
+import com.melvinpena.comparativa.data.repository.RegistroRepository
+import com.melvinpena.comparativa.data.repository.RequestHandle
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -35,6 +37,38 @@ class ComparativaActivity : Activity() {
     private lateinit var timeoutInput: EditText
     private lateinit var resultView: TextView
     private lateinit var volleyQueue: com.android.volley.RequestQueue
+
+    private var activeOkHttpCall: OkHttpCall? = null
+    private var activeRetrofitCall: RequestHandle? = null
+    private var requestInProgress = false
+
+    private fun beginRequest(client: String): Boolean {
+        if (requestInProgress) return false
+        if (tokenInput.text.any { it.code < 32 || it.code > 126 }) {
+            resultView.text = "El token contiene caracteres inválidos. Pégalo en una sola línea."
+            return false
+        }
+        requestInProgress = true
+        resultView.text = "Consultando con $client…"
+        return true
+    }
+
+    private fun publishResult(message: String, diagnostic: String) {
+        if (isFinishing || isDestroyed) return
+        requestInProgress = false
+        resultView.text = message
+        // Do not log URL, headers, response body or JWT.
+        Log.i("ComparativaHTTP", "$diagnostic | $message")
+    }
+
+    private fun httpClient(timeout: Int) = OkHttpClient.Builder()
+        .connectTimeout(timeout.toLong(), TimeUnit.MILLISECONDS)
+        .readTimeout(timeout.toLong(), TimeUnit.MILLISECONDS)
+        .writeTimeout(timeout.toLong(), TimeUnit.MILLISECONDS)
+        .retryOnConnectionFailure(false)
+        .followRedirects(false)
+        .followSslRedirects(false)
+        .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,9 +128,10 @@ class ComparativaActivity : Activity() {
         settingsCard.addView(UiStyle.text(this, "CONFIGURACIÓN DE LA API", 11f, UiStyle.teal, true))
         settingsCard.addView(UiStyle.space(this, 8))
         settingsCard.addView(label("URL base"))
-        baseUrlInput = input("https://servidor/").also(settingsCard::addView)
+        baseUrlInput = input("https://servidor/").also { it.setText(BuildConfig.API_BASE_URL); settingsCard.addView(it) }
         settingsCard.addView(label("Token JWT"))
         tokenInput = input("Pega tu token (opcional)").also {
+            it.setText(com.melvinpena.comparativa.data.remote.AuthSession.accessToken.orEmpty())
             it.inputType = android.text.InputType.TYPE_CLASS_TEXT or
                 android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
             settingsCard.addView(it)
@@ -209,7 +244,7 @@ class ComparativaActivity : Activity() {
         val token = tokenInput.text.toString().trim()
         val timeout = timeoutMillis() ?: return
         val startedAt = SystemClock.elapsedRealtime()
-        resultView.text = "Consultando con Volley…"
+        if (!beginRequest("Volley")) return
 
         val request = object : JsonArrayRequest(
             Request.Method.GET,
@@ -224,9 +259,11 @@ class ComparativaActivity : Activity() {
         }
         request.retryPolicy = DefaultRetryPolicy(
             timeout,
-            1,
+            0,
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT,
         )
+        request.tag = this
+        request.setShouldCache(false)
         volleyQueue.add(request)
     }
 
@@ -235,18 +272,17 @@ class ComparativaActivity : Activity() {
         val token = tokenInput.text.toString().trim()
         val timeout = timeoutMillis() ?: return
         val startedAt = SystemClock.elapsedRealtime()
-        resultView.text = "Consultando con OkHttp…"
+        if (!beginRequest("OkHttp")) return
 
-        val client = OkHttpClient.Builder()
-            .callTimeout(timeout.toLong(), TimeUnit.MILLISECONDS)
-            .build()
+        val client = httpClient(timeout)
         val request = OkHttpRequest.Builder()
             .url(url)
             .apply { authorizationHeaders(token).forEach { (name, value) -> addHeader(name, value) } }
             .get()
             .build()
 
-        client.newCall(request).enqueue(object : OkHttpCallback {
+        activeOkHttpCall = client.newCall(request)
+        activeOkHttpCall!!.enqueue(object : OkHttpCallback {
             override fun onFailure(call: OkHttpCall, e: IOException) {
                 runOnUiThread { showFailure("OkHttp", e, startedAt) }
             }
@@ -282,48 +318,19 @@ class ComparativaActivity : Activity() {
         val token = tokenInput.text.toString().trim()
         val timeout = timeoutMillis() ?: return
         val startedAt = SystemClock.elapsedRealtime()
-        resultView.text = "Consultando con Retrofit…"
+        if (!beginRequest("Retrofit")) return
 
-        val client = OkHttpClient.Builder()
-            .callTimeout(timeout.toLong(), TimeUnit.MILLISECONDS)
-            .build()
-        val api = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(RegistrosApi::class.java)
-
-        api.getRegistros(bearerToken(token)).enqueue(object : retrofit2.Callback<List<JsonObject>> {
-            override fun onResponse(
-                call: retrofit2.Call<List<JsonObject>>,
-                response: Response<List<JsonObject>>,
-            ) {
-                if (!response.isSuccessful) {
-                    showHttpFailure(
-                        "Retrofit",
-                        response.code(),
-                        response.message(),
-                        startedAt,
-                    )
-                    return
-                }
-                val records = response.body()
-                if (records == null) {
-                    showFailure(
-                        "Retrofit",
-                        IOException("El servidor devolvió una respuesta vacía."),
-                        startedAt,
-                    )
-                } else {
-                    showSuccess("Retrofit", records.size, startedAt)
+        val repository = RegistroRepository(baseUrl, timeout.toLong(), token)
+        activeRetrofitCall = repository.listar { result ->
+            when (result) {
+                is ApiResult.Success -> showSuccess("Retrofit", result.value.size, startedAt)
+                is ApiResult.Failure -> {
+                    if (result.httpCode != null) showHttpFailure("Retrofit", result.httpCode, "", startedAt)
+                    else publishResult("Retrofit: ${result.message} (${elapsedMillis(startedAt)} ms).",
+                        result.cause?.javaClass?.simpleName ?: "error")
                 }
             }
-
-            override fun onFailure(call: retrofit2.Call<List<JsonObject>>, e: Throwable) {
-                showFailure("Retrofit", e, startedAt)
-            }
-        })
+        }
     }
 
     private fun requestUrl(): String? {
@@ -338,12 +345,13 @@ class ComparativaActivity : Activity() {
             return null
         }
         val normalized = if (value.endsWith("/")) value else "$value/"
-        val parsed = android.net.Uri.parse(normalized)
-        if ((parsed.scheme != "http" && parsed.scheme != "https") || parsed.host.isNullOrBlank()) {
+        val parsed = normalized.toHttpUrlOrNull()
+        if (parsed == null || parsed.query != null || parsed.fragment != null ||
+            parsed.username.isNotEmpty() || parsed.password.isNotEmpty()) {
             resultView.text = "La URL debe comenzar con http:// o https:// y tener un host válido."
             return null
         }
-        return normalized
+        return parsed.toString()
     }
 
     private fun timeoutMillis(): Int? {
@@ -356,10 +364,8 @@ class ComparativaActivity : Activity() {
     }
 
     private fun authorizationHeaders(token: String): MutableMap<String, String> {
-        return if (token.isBlank()) {
-            mutableMapOf()
-        } else {
-            mutableMapOf("Authorization" to bearerToken(token))
+        return mutableMapOf("Cache-Control" to "no-cache, no-store").apply {
+            if (token.isNotBlank()) put("Authorization", bearerToken(token))
         }
     }
 
@@ -367,7 +373,7 @@ class ComparativaActivity : Activity() {
         if (token.startsWith("Bearer ", ignoreCase = true)) token else "Bearer $token"
 
     private fun showSuccess(client: String, count: Int, startedAt: Long) {
-        resultView.text = "$client: $count registros recibidos en ${elapsedMillis(startedAt)} ms."
+        publishResult("$client: $count registros recibidos en ${elapsedMillis(startedAt)} ms.", "success")
     }
 
     private fun showHttpFailure(client: String, code: Int, message: String, startedAt: Long) {
@@ -376,24 +382,37 @@ class ComparativaActivity : Activity() {
             500 -> "Error interno del servidor (500)."
             else -> "El servidor respondió HTTP $code${if (message.isBlank()) "" else ": $message"}."
         }
-        resultView.text = "$client: $explanation (${elapsedMillis(startedAt)} ms)."
+        publishResult("$client: $explanation (${elapsedMillis(startedAt)} ms).", "HTTP $code")
     }
 
     private fun showFailure(client: String, error: Throwable, startedAt: Long) {
-        val cause = generateSequence(error) { it.cause }.firstOrNull {
-            it is java.net.SocketTimeoutException || it is java.net.UnknownHostException
-        } ?: error
-        val explanation = when (cause) {
-            is java.net.SocketTimeoutException -> "Tiempo de espera agotado."
-            is java.net.UnknownHostException -> "No se pudo encontrar el servidor; revisa la red o la URL."
-            else -> cause.message ?: cause.javaClass.simpleName
+        val status = (error as? com.android.volley.VolleyError)?.networkResponse?.statusCode
+        if (status != null) {
+            showHttpFailure(client, status, "", startedAt)
+            return
         }
-        resultView.text = "$client: $explanation (${elapsedMillis(startedAt)} ms)."
+        val causes = generateSequence(error) { it.cause }.take(16).toList()
+        val explanation = when {
+            causes.any { it is com.android.volley.TimeoutError || it is java.net.SocketTimeoutException ||
+                it is java.io.InterruptedIOException } -> "Tiempo de espera agotado."
+            causes.any { it is java.net.UnknownHostException } ->
+                "No se pudo resolver el servidor. Revisa la conexión y la URL."
+            causes.any { it is java.net.ConnectException || it is com.android.volley.NoConnectionError } ->
+                "No se pudo conectar con la API. Revisa la red y que el servidor esté activo."
+            causes.any { it is javax.net.ssl.SSLException } -> "No se pudo establecer una conexión segura."
+            causes.any { it is com.android.volley.ParseError || it is com.google.gson.JsonParseException } ->
+                "La API devolvió un JSON inválido o con un formato inesperado."
+            else -> "No se pudo completar la solicitud."
+        }
+        publishResult("$client: $explanation (${elapsedMillis(startedAt)} ms).",
+            causes.joinToString(" <- ") { it.javaClass.simpleName })
     }
 
     private fun elapsedMillis(startedAt: Long) = SystemClock.elapsedRealtime() - startedAt
 
     override fun onDestroy() {
+        activeOkHttpCall?.cancel()
+        activeRetrofitCall?.cancel()
         super.onDestroy()
         if (::volleyQueue.isInitialized) {
             volleyQueue.cancelAll(this)

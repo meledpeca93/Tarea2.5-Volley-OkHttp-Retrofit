@@ -1,0 +1,2 @@
+PASS: API detenida con red activa; mensaje sin conexión, Reintentar y app abierta.
+PASS: API reiniciada; Reintentar recuperó el listado.

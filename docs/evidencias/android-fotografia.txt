@@ -1,0 +1,2 @@
+PASS: captura desde cámara del emulador, procesamiento, POST Base64 y GET detalle. JPEG 768x1024, 13234 bytes.
+PASS: registro de prueba eliminado mediante confirmación en Android.

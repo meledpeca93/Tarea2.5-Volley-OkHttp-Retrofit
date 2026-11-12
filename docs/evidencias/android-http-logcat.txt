@@ -1,0 +1,6 @@
+11-11 06:00:42.817  8862 13802 I okhttp.OkHttpClient: --> POST http://10.0.2.2:5000/api/registros (17761-byte body)
+11-11 06:00:43.649  8862 13802 I okhttp.OkHttpClient: <-- 201 Created http://10.0.2.2:5000/api/registros (832ms, unknown-length body)
+11-11 06:00:52.127  8862 13802 I okhttp.OkHttpClient: --> DELETE http://10.0.2.2:5000/api/registros/6
+11-11 06:00:52.152  8862 13802 I okhttp.OkHttpClient: <-- 204 No Content http://10.0.2.2:5000/api/registros/6 (23ms, 0-byte body)
+11-11 06:00:52.179  8862 13802 I okhttp.OkHttpClient: --> GET http://10.0.2.2:5000/api/registros
+11-11 06:00:52.189  8862 13802 I okhttp.OkHttpClient: <-- 200 OK http://10.0.2.2:5000/api/registros (9ms, unknown-length body)

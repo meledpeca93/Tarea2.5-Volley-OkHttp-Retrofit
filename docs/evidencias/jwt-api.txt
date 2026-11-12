@@ -1,0 +1,15 @@
+PASS: GET /api/registros sin JWT -> HTTP 401
+PASS: GET /api/registros/1 sin JWT -> HTTP 401
+PASS: POST /api/registros sin JWT -> HTTP 401
+PASS: PUT /api/registros/1 sin JWT -> HTTP 401
+PASS: DELETE /api/registros/1 sin JWT -> HTTP 401
+PASS: GET /api/pruebas/error sin JWT -> HTTP 401
+PASS: GET /api/pruebas/demora sin JWT -> HTTP 401
+PASS: Credenciales incorrectas -> HTTP 401
+PASS: Login válido -> HTTP 200
+PASS: Listado con JWT válido -> HTTP 200
+PASS: JWT malformado -> HTTP 401
+PASS: JWT con contenido alterado -> HTTP 401
+PASS: JWT vencido -> HTTP 401
+PASS: JWT emisor incorrecto -> HTTP 401
+PASS: JWT audiencia incorrecta -> HTTP 401

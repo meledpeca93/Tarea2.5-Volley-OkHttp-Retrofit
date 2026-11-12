@@ -1,0 +1,6 @@
+PASS: validación local de título vacío
+PASS: POST desde Android, detalle y persistencia en la API
+PASS: PUT desde Android y contenido actualizado en API
+PASS: GET listado, selección y GET detalle
+PASS: cancelar eliminación conserva registro
+PASS: DELETE confirmado desde Android y eliminación en API
