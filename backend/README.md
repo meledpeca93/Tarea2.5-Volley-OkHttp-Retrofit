@@ -110,8 +110,13 @@ Solo se registran en Development:
 - GET /api/pruebas/demora: espera 15 segundos y responde un arreglo vacío.
 - GET /api/pruebas/error: provoca una excepción para verificar el manejador global.
 
-El laboratorio Android aún fija /api/registros: falta permitir seleccionar estos
-endpoints de prueba para ejecutar los mismos fallos con los tres clientes.
+El laboratorio Android en debug permite seleccionar estas rutas para los tres
+clientes. Usar JWT válido y timeout menor a 15000 ms para comprobar la demora.
+Los tres clientes Android ya verificaron demora/timeout y HTTP 500.
+Ver [matriz completa de 15 fallos](../docs/evidencias/LABORATORIO_FALLOS.md).
+Las pruebas usaron timeout de 2000 ms frente a demora real de 15 segundos, JWT
+válido y Development; no se modificaron registros. La API fue reiniciada después
+del caso de servidor detenido y quedó disponible al terminar.
 
 ## Evidencias y pendientes
 

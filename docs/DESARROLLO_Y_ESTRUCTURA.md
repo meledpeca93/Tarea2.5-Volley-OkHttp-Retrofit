@@ -1,6 +1,6 @@
 # Desarrollo y estructura de la aplicación
 
-Actualizado: 11 de noviembre de 2026.
+Actualizado: 12 de noviembre de 2026.
 
 ## Alcance actual
 
@@ -8,7 +8,9 @@ Proyecto creado desde cero para Bitácora de campo: backend de tarea 2.2,
 cliente Android de tarea 2.3 y laboratorio comparativo de tarea 2.5.
 El CRUD Android con MVVM y fotografía está implementado y probado localmente.
 El flujo de voz está implementado, pero falta verificar un dictado con audio real.
-JWT local está implementado y verificado; la matriz completa de pruebas 2.5 sigue pendiente.
+JWT local y matriz de 15 fallos del laboratorio implementados y verificados.
+Las 15 mediciones, el cuadro comparativo y la recomendación están documentados;
+siguen pendientes los entregables y Git/PR revisado.
 
 ## Tecnologías
 
@@ -167,8 +169,8 @@ data:. El listado proyecta SQL sin seleccionar la foto. Validación 400 con erro
 por campo; excepciones 500 con ProblemDetails genérico y traceId sin detalle interno.
 
 Solo Development publica Swagger/OpenAPI y rutas de prueba: /api/pruebas/demora
-(15 s) y /api/pruebas/error (500 controlado). Falta integrar selección de estas
-rutas en el laboratorio. El CRUD y las rutas de prueba están protegidos con JWT; ver la extensión de acceso al final.
+(15 s) y /api/pruebas/error (500 controlado). El selector debug del laboratorio
+permite consultar ambas con los tres clientes. El CRUD y las rutas de prueba están protegidos con JWT; ver la extensión de acceso al final.
 
 ## Configuración y ejecución
 
@@ -239,9 +241,10 @@ alcance, se creó la API en cuatro capas y se implementó el cliente MVVM compar
 Los primeros fallos de automatización se debían a selección de texto y comparación
 de mayúsculas de botones; el recorrido final pasó después de corregir el script.
 
-Pendientes: dictado real, orientación EXIF, persistencia tras muerte del proceso,
-JWT, matriz completa de fallos/mediciones 2.5, PDF, videos, commits en rama personal
-y PR revisado por un compañero. No atribuir pruebas ni participación no realizadas.
+Pendientes de tarea 2.5: PDF, video, commits/push en rama personal y PR revisado
+por un compañero. La matriz de fallos, mediciones, comparación y recomendación están completas.
+Dictado real, orientación EXIF y persistencia tras muerte del proceso quedan fuera
+del alcance actual de tarea 2.5. No atribuir pruebas ni participación no realizadas.
 
 
 ## Extensión JWT y acceso Android
@@ -306,67 +309,114 @@ transformador OpenAPI y que el proveedor de archivos de configuración excluía
 archivos con prefijo punto; se corrigieron antes de obtener el resultado final.
 El archivo privado se carga explícitamente con AddJsonStream.
 
+## Selector de escenarios y pruebas realizadas
+
+En ComparativaActivity se agregó un Spinner con rutas fijas definidas en
+`data/remote/EscenarioLaboratorio.kt`:
+
+| Selección | Ruta GET | Resultado esperado |
+| --- | --- | --- |
+| Listado normal | /api/registros | Arreglo de registros |
+| Tiempo de espera | /api/pruebas/demora | Demora de 15 segundos, superior al timeout de prueba |
+| Error interno | /api/pruebas/error | HTTP 500 controlado |
+
+Volley y OkHttp construyen la URL con la ruta seleccionada. Retrofit llama
+`RegistroRepository.consultarLaboratorio`; el caso normal delega en `listar`
+y los otros usan `RegistroApi.consultarLaboratorio` con `@Url` y `@Header`.
+Los tres conservan JWT y timeout configurados. URL, JWT, timeout y selector quedan
+bloqueados durante una solicitud. Logcat incluye escenario y error, sin JWT ni cuerpos.
+Release ofrece solo listado normal; el backend registra las rutas de fallo
+exclusivamente en Development y exige autenticación.
+
+Verificación ejecutada: `./gradlew :app:assembleDebug`, `./gradlew :app:installDebug`
+y `dotnet build backend/Bitacora.sln`. Compilación e instalación correctas.
+Los 15 fallos se ejecutaron con timeout de 2000 ms y JWT válido salvo el caso 401.
+El 401 documentado en Android corresponde a token ausente; la expiración también
+se probó en API durante la fase JWT, sin atribuirla a esta matriz Android.
+
+[Tabla completa de fallos, capturas y Logcat](evidencias/LABORATORIO_FALLOS.md).
+Datos estructurados: `evidencias/laboratorio-fallos.json`.
+Script reproducible: `scripts/verify_lab_failures.py`; requiere APK instalada,
+emulador, backend compilado y puerto 5000 libre. Deja su API activa y restaura la red.
+No modifica registros. Se comprobó resultado visible, actividad de laboratorio
+y conservación del PID, sin cierre inesperado en los 15 casos.
+
+La primera automatización falló al seleccionar un botón por la evaluación de un
+nodo XML; se corrigió el script antes de guardar resultados. La evidencia inicial
+de red se tomó durante la transición de modo avión: se repitieron únicamente
+esos tres casos tras confirmar ausencia de red predeterminada activa. Las capturas
+y Logcat actuales corresponden a las ejecuciones finales. Las horas de Logcat
+pertenecen al reloj del emulador. La red quedó restaurada (avión 0, Wi-Fi 1).
+
 ## Punto de continuación — pendientes de tarea 2.5
 
-Estado al pausar el trabajo, 11 de noviembre de 2026. Retomar esta noche desde
-esta lista. No iniciar nuevamente las fases ya verificadas salvo cambios o fallos.
+Estado actualizado al 12 de noviembre de 2026.
 
-### Ya verificado
+### Completado
 
-- Laboratorio con Volley, OkHttp y Retrofit para GET /api/registros.
-- JWT local y login Android; mismo token compartido por los tres clientes.
-- Acceso exitoso autenticado y respuesta 401 al omitir el token en cada cliente.
-- Retrofit reutiliza el repositorio del CRUD MVVM.
-- API local, compilación e instalación Android funcionando en la última verificación.
-- Evidencias JWT: jwt-api.txt, jwt-android.txt y postman-api-jwt.txt en docs/evidencias.
+- [x] Laboratorio con Volley, OkHttp y Retrofit, JWT, cantidad y duración.
+- [x] Retrofit reutiliza RegistroRepository del CRUD.
+- [x] Selector de listado, demora y HTTP 500 compartido por los tres clientes.
+- [x] Rutas de fallos limitadas a Development; selector de fallos solo en debug.
+- [x] Compilación API sin errores ni advertencias e instalación debug en Pixel 4 XL.
+- [x] Cinco escenarios por cliente: 15 casos con captura y Logcat, sin cierre.
+- [x] Red restaurada y API reiniciada después de las pruebas.
 
 ### Pendientes en orden
 
-- [ ] Preparar selección de escenarios del laboratorio: GET /api/registros para
-  consulta normal, /api/pruebas/demora para timeout y /api/pruebas/error para 500.
-  Los tres clientes deben consultar la misma ruta en cada escenario, con JWT
-  válido, y las rutas de prueba deben permanecer solo en Development.
-- [ ] API detenida: ejecutar Volley, OkHttp y Retrofit; registrar error técnico,
-  mensaje visible, duración, continuidad de la app y captura o Logcat.
-- [ ] Modo avión: ejecutar los tres clientes con Wi-Fi/datos realmente apagados;
-  guardar la misma evidencia y restaurar la conexión al terminar.
-- [ ] Timeout: ejecutar los tres clientes con espera configurada menor a los
-  15 segundos del endpoint de demora; documentar excepción y mensaje.
-- [ ] HTTP 500: ejecutar los tres clientes contra el fallo controlado y documentar
-  estado HTTP, mensaje y ausencia de cierre inesperado.
-- [ ] Consolidar las 15 pruebas de fallos en la tabla final: 3 casos 401 ya
-  verificados y 12 casos restantes. Las pruebas previas del CRUD Retrofit de API
-  detenida/modo avión no sustituyen la matriz completa del laboratorio.
-- [ ] Realizar cinco consultas exitosas por cliente: 15 mediciones en total,
-  mismo endpoint, token válido, dispositivo, timeout, condiciones de red y datos.
-  Registrar cantidad de registros y calcular tres promedios. Los tiempos aislados
-  de la verificación JWT no son esos promedios.
-- [ ] Completar cuadro comparativo: líneas de código con criterio de conteo
-  explícito, encabezados, JSON, hilo del callback, errores, reintentos/timeouts,
-  facilidad de prueba/mantenimiento y promedios de cinco ejecuciones.
-- [ ] Redactar recomendación final apoyada en el código y resultados reales.
-- [ ] Ordenar GitHub: llevar todo a feature/comparativa-melvin-pena sin perder
-  cambios, realizar commits descriptivos y preparar PR hacia principal con
-  revisión real de otro integrante. Verificar el estado antes de modificar ramas.
-- [ ] Preparar PDF individual con comparación, tabla de fallos, capturas/Logcat
-  y recomendación; no incluir contraseñas, claves ni JWT completos.
-- [ ] Grabar video individual de 3–4 minutos con cámara encendida: explicar
-  Volley y OkHttp con palabras propias y demostrar al menos dos fallos.
-- [ ] Verificar enlaces/archivos finales de PR, PDF y video para la entrega.
+- [x] Realizar cinco consultas exitosas por cliente: 15 mediciones con el mismo
+  endpoint, JWT válido, dispositivo, datos, timeout y condiciones de red.
+- [x] Calcular promedios y completar cuadro comparativo: conteo de líneas con
+  criterio explícito, encabezados, JSON, hilo, errores, reintentos/timeouts y mantenimiento.
+- [x] Redactar recomendación final con resultados reales.
+- [x] Ordenar rama personal según el enunciado: feature/comparativa-melvin-pena.
+  Se conserva el historial previo y se incorpora main sin reescribir commits.
+- [ ] Publicar y verificar commits de selector, pruebas, evidencias y documentación.
+- [ ] Abrir PR de continuación hacia main y obtener revisión real de otro integrante.
+  El PR #3 anterior ya fue integrado; resolver conflictos no acredita revisión.
+- [ ] Preparar PDF individual con tabla comparativa, matriz de fallos y evidencias.
+- [ ] Grabar video individual de 3–4 minutos, cámara encendida, explicación de
+  Volley/OkHttp y demostración de al menos dos fallos.
+- [ ] Verificar enlaces y archivos finales para entregar el 13 de noviembre a las 23:59.
 
 ### Cómo retomar
 
-1. Confirmar que la API local y el Pixel están disponibles; si la API está
-   detenida, seguir backend/README.md para iniciarla en Development.
-2. Iniciar sesión en Android si el proceso murió o el token de 15 minutos venció.
-   Consultar credenciales solo en backend/Bitacora.Api/.dev-login.json; no editar
-   ese archivo para cambiar la contraseña. El usuario decidió conservar la actual
-   y no añadir una opción de cambio.
-3. Empezar por la selección de endpoints de prueba y los doce casos pendientes.
-4. Agrupar compilación, instalación y verificaciones en acciones concretas para
-   reducir solicitudes de permisos. No repetir comprobaciones ya exitosas sin
-   un cambio, fallo o duda que lo justifique.
+1. Comprobar API y emulador; no repetir fallos ya verificados salvo cambios o dudas.
+2. Iniciar sesión si el token de 15 minutos venció. Consultar credenciales solo
+   en backend/Bitacora.Api/.dev-login.json, sin publicarlas ni modificar su contraseña.
+3. Continuar con rama/commits/PR revisado y preparación del PDF y video.
+   Las 15 mediciones exitosas ya están guardadas; no repetirlas salvo cambios o dudas.
+4. Declarar el orden y las condiciones; excluir tiempos fallidos de los promedios.
 
-La entrega sigue incompleta hasta finalizar las pruebas, mediciones y entregables.
-El dictado real por micrófono y otras verificaciones específicas de tarea 2.3
-son pendientes separados; no confundirlos con los requisitos de esta lista 2.5.
+Dictado real, orientación EXIF y persistencia de sesión son asuntos de tarea 2.3
+fuera del alcance actual. No bloquean los siguientes pasos de la tarea 2.5.
+
+## Mediciones exitosas completadas (12 de noviembre de 2026)
+
+Se realizaron cinco consultas autenticadas de listado por cliente, en cinco
+rondas Volley → OkHttp → Retrofit, timeout de 2000 ms, mismo emulador y datos.
+No se ejecutó calentamiento del listado en este proceso; el login ocurrió antes.
+La API ya estaba activa por las pruebas anteriores. Los datos conservaron el mismo
+contenido antes y después. No se añadieron ni eliminaron registros de prueba.
+
+[Metodología, quince muestras, promedios y evidencias](evidencias/LABORATORIO_MEDICIONES.md).
+Script: `scripts/measure_lab_clients.py`. La app conservó su PID en toda la serie.
+Estos promedios describen esta implementación y este conjunto de datos; no
+establecen una clasificación universal de las librerías.
+Conteo de líneas, valoración de mantenimiento y recomendación final completados.
+Los siguientes pasos son PDF, video y Git/PR revisado.
+
+## Cuadro comparativo y recomendación completados
+
+La base del informe contiene la comparación final de encabezados, JSON, hilos,
+errores, reintentos, timeouts, pruebas, mantenimiento y promedios medidos.
+Conteo reproducible: `python3 scripts/count_lab_lines.py`; adaptadores de Activity:
+Volley 26, OkHttp 42 y Retrofit 18 líneas, con soporte compartido informado aparte.
+Se recomienda Retrofit por DTO, repositorio reutilizado y errores centralizados;
+Volley obtuvo el menor promedio de esta serie. No se infiere rendimiento general.
+La recomendación declara arreglo vacío, creación de clientes por consulta y
+logging BASIC de Retrofit en debug como límites de las mediciones.
+
+Ver [informe individual](BASE_INFORME.md) y
+[conteo de líneas](evidencias/laboratorio-lineas.json).
+Próximo paso: preparar Git/PR revisado, PDF y video individual.

@@ -58,8 +58,10 @@ compatibles instaladas en el dispositivo. La descripción también puede editars
 ## Pendientes de entrega
 
 La API incorpora JWT y un login local de laboratorio; ver la sección de acceso.
-Faltan la matriz completa de fallos de los tres clientes, cinco mediciones por cliente, dictado real
-por micrófono, capturas finales, PDF, videos y revisión del PR.
+La matriz de 15 fallos y las 15 mediciones exitosas están completas, con capturas
+y Logcat. Cuadro comparativo y recomendación final completos. Faltan PDF,
+video individual, commits/push y revisión real del PR. Dictado por micrófono y
+otras mejoras del CRUD quedan fuera del alcance de tarea 2.5.
 Las pruebas del backend no sustituyen las pruebas de la interfaz Android.
 
 - [Base del informe individual](docs/BASE_INFORME.md)
@@ -89,6 +91,49 @@ La verificación conjunta está en `scripts/verify_jwt.py`; reportes de esta fas
 
 JWT verificado: 15 casos API; Postman actualizado 20 solicitudes/29 aserciones;
 los tres clientes Android pasan con JWT y muestran 401 sin él. Esto completa el
-caso de token ausente de la matriz 2.5; aún faltan los otros fallos y los promedios.
+caso de token ausente de la matriz 2.5. Los otros fallos también están verificados;
+los promedios de las cinco consultas por cliente también están documentados.
 
-Para retomar esta noche, consultar la sección **Punto de continuación — pendientes de tarea 2.5** en ambos documentos de docs/.
+Para continuar con Git/PR y los entregables, consultar la sección **Punto de continuación — pendientes de tarea 2.5** en ambos documentos de docs/.
+
+
+## Matriz de fallos 2.5 completada
+
+El 12 de noviembre se verificaron los cinco escenarios con los tres clientes:
+API detenida, modo avión sin red activa, timeout, JWT ausente (401) y HTTP 500.
+Los 15 casos conservaron el proceso y mostraron el error en la interfaz.
+Ver [tabla, capturas y Logcat](docs/evidencias/LABORATORIO_FALLOS.md).
+Las cinco mediciones exitosas por cliente están documentadas; siguen pendientes
+los entregables y Git/PR revisado.
+
+## Estado de Git y PR
+
+PR utilizado: [#3](https://github.com/meledpeca93/Tarea2.5-Volley-OkHttp-Retrofit/pull/3).
+El estudiante confirmó resolución de los cinco archivos en conflicto.
+La copia local incorporó esa resolución mediante fast-forward sin perder cambios.
+Rama de entrega: feature/comparativa-melvin-pena, conservando el historial previo.
+El PR #3 fue integrado en main; esta continuación se entrega mediante un nuevo PR.
+La revisión real de otro integrante sigue pendiente.
+
+Para repetir la matriz, con API compilada, puerto 5000 libre, APK debug instalada
+y emulador activo: `python3 scripts/verify_lab_failures.py`. Restaura la red y
+deja su API activa. No repetirla para obtener promedios de consultas exitosas.
+
+## Mediciones exitosas 2.5
+
+Quince consultas verificadas con JWT y timeout de 2000 ms. Promedios: Volley 209.40 ms, OkHttp 774.20 ms, Retrofit 869.40 ms.
+Ver [muestras, metodología y evidencias](docs/evidencias/LABORATORIO_MEDICIONES.md).
+Reproducción: `python3 scripts/measure_lab_clients.py` con API, APK y emulador listos.
+Los resultados corresponden a esta implementación; no a rendimiento universal.
+
+## Cuadro comparativo final
+
+Completado en [el informe individual](docs/BASE_INFORME.md), con criterio de
+conteo de líneas y soporte compartido explícito. Reproducción del conteo:
+`python3 scripts/count_lab_lines.py`. Se recomienda Retrofit por el repositorio
+reutilizado, DTO tipados y errores centralizados. Volley tuvo el menor promedio
+observado; la conclusión distingue mantenimiento de rendimiento y declara los
+límites del listado vacío, clientes por consulta y logging debug.
+
+Pendientes actuales: verificar publicación de la rama y nuevo PR, revisión real
+de otro integrante, PDF, video individual y enlaces/archivos finales.
