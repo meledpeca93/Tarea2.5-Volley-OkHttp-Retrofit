@@ -1,0 +1,2 @@
+11-12 07:40:36.945  6078  6078 I ComparativaHTTP: ERROR | HTTP 500 | Volley: Error interno del servidor (500). (639 ms).
+Proceso Android conservado; resultado visible en laboratorio.

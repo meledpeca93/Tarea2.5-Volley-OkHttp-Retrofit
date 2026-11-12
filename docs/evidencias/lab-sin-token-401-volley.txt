@@ -1,0 +1,2 @@
+11-12 07:42:22.008  6078  6078 I ComparativaHTTP: NORMAL | HTTP 401 | Volley: Token ausente, inválido o vencido (401). (999 ms).
+Proceso Android conservado; resultado visible en laboratorio.
