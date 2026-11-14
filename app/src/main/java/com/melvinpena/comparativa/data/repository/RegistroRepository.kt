@@ -15,6 +15,8 @@ sealed interface ApiResult<out T> {
 }
 
 /** The only application class that calls the Retrofit service. */
+
+
 class RegistroRepository(
     baseUrl: String = BuildConfig.API_BASE_URL,
     timeoutMs: Long = ApiClient.DEFAULT_TIMEOUT_MS,
@@ -24,8 +26,8 @@ class RegistroRepository(
     private val authorization: String?
         get() = (token ?: AuthSession.accessToken.orEmpty()).trim().takeIf { it.isNotEmpty() }?.let {
             if (it.startsWith("Bearer ", true)) it else "Bearer $it"
-        }
-    fun listar(done: (ApiResult<List<RegistroResumen>>) -> Unit) = execute(api.listar(authorization), done)
+        }  
+ fun listar(done: (ApiResult<List<RegistroResumen>>) -> Unit) = execute(api.listar(authorization), done)
     fun consultarLaboratorio(escenario: EscenarioLaboratorio, done: (ApiResult<List<RegistroResumen>>) -> Unit): RequestHandle {
         require(BuildConfig.DEBUG || escenario == EscenarioLaboratorio.NORMAL) {
             "Los escenarios de fallo solo están disponibles en debug."
@@ -42,7 +44,11 @@ class RegistroRepository(
                 is ApiResult.Success -> done(ApiResult.Success(Unit))
                 is ApiResult.Failure -> done(result)
             }
+
         }, allowEmpty = true)
+        
+        
+        
 
     private fun <T> execute(call: Call<T>, done: (ApiResult<T?>) -> Unit, allowEmpty: Boolean): RequestHandle {
         call.enqueue(object : Callback<T> {
@@ -60,6 +66,7 @@ class RegistroRepository(
         })
         return RequestHandle { call.cancel() }
     }
+    
     private fun <T : Any> execute(call: Call<T>, done: (ApiResult<T>) -> Unit): RequestHandle =
         execute(call, { result ->
             when (result) {
@@ -68,6 +75,8 @@ class RegistroRepository(
             }
         }, allowEmpty = false)
 
+        
+        
     private fun httpError(response: Response<*>): ApiResult.Failure {
         val message = when (response.code()) {
             400 -> {
@@ -88,6 +97,9 @@ class RegistroRepository(
         }
         return ApiResult.Failure(message, response.code() >= 500, response.code())
     }
+    
+    
+    
     private fun networkError(t: Throwable): ApiResult.Failure {
         val causes = generateSequence(t) { it.cause }.take(16).toList()
         val message = when {

@@ -19,6 +19,9 @@ internal object UiStyle {
     val canvas = Color.rgb(246, 248, 251)
     val border = Color.rgb(228, 233, 239)
     val white = Color.WHITE
+    val errorBg = Color.rgb(254, 242, 242)
+    val errorText = Color.rgb(185, 28, 28)
+    val errorBorder = Color.rgb(254, 202, 202)
 
     fun dp(context: Context, value: Int): Int =
         (value * context.resources.displayMetrics.density).toInt()
@@ -77,6 +80,37 @@ internal object UiStyle {
         setOnClickListener { onClick() }
     }
 
+    fun outlinedButton(
+        context: Context,
+        value: String,
+        textColor: Int = navy,
+        onClick: () -> Unit,
+    ): Button = Button(context).apply {
+        text = value
+        isAllCaps = false
+        textSize = 15f
+        setTextColor(textColor)
+        gravity = Gravity.CENTER
+        minHeight = dp(context, 52)
+        minimumHeight = dp(context, 52)
+        setPadding(dp(context, 18), dp(context, 8), dp(context, 18), dp(context, 8))
+        background = outline(context, 16)
+        stateListAnimator = null
+        setOnClickListener { onClick() }
+    }
+
+    fun alertCard(context: Context): LinearLayout =
+        LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            background = GradientDrawable().apply {
+                setColor(errorBg)
+                cornerRadius = dp(context, 14).toFloat()
+                setStroke(dp(context, 1), errorBorder)
+            }
+            setPadding(dp(context, 14), dp(context, 12), dp(context, 14), dp(context, 12))
+        }
+
     fun field(context: Context, editText: EditText) {
         editText.textSize = 15f
         editText.setTextColor(ink)
@@ -96,4 +130,7 @@ internal object UiStyle {
 
     fun space(context: Context, height: Int): View =
         View(context).apply { layoutParams = LinearLayout.LayoutParams(1, dp(context, height)) }
+
+    fun spaceHorizontal(context: Context, width: Int): View =
+        View(context).apply { layoutParams = LinearLayout.LayoutParams(dp(context, width), 1) }
 }

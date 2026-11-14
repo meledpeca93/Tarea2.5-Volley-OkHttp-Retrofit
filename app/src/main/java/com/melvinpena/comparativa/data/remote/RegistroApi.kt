@@ -10,12 +10,20 @@ data class RegistroInput(val titulo: String, val descripcion: String, val fotoBa
 
 interface RegistroApi {
     @Headers("Cache-Control: no-cache, no-store")
+    
     @GET("api/registros") fun listar(@Header("Authorization") token: String?): Call<List<RegistroResumen>>
+    
     @Headers("Cache-Control: no-cache, no-store")
+    
     @GET fun consultarLaboratorio(@Url ruta: String, @Header("Authorization") token: String?): Call<List<RegistroResumen>>
+   
     @GET("api/registros/{id}") fun consultar(@Path("id") id: Int, @Header("Authorization") token: String?): Call<RegistroDetalle>
+   
     @POST("api/registros") fun crear(@Body input: RegistroInput, @Header("Authorization") token: String?): Call<RegistroDetalle>
+    
     @PUT("api/registros/{id}") fun actualizar(@Path("id") id: Int, @Body input: RegistroInput,
-        @Header("Authorization") token: String?): Call<RegistroDetalle>
+    
+         @Header("Authorization") token: String?): Call<RegistroDetalle>
+    
     @DELETE("api/registros/{id}") fun eliminar(@Path("id") id: Int, @Header("Authorization") token: String?): Call<Void>
 }

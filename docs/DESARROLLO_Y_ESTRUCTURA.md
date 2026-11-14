@@ -375,7 +375,8 @@ Estado actualizado al 12 de noviembre de 2026.
 - [x] Abrir PR de continuación hacia main: [PR #4](https://github.com/meledpeca93/Tarea2.5-Volley-OkHttp-Retrofit/pull/4).
 - [ ] Obtener revisión real de otro integrante antes de integrar el PR #4.
   El PR #3 anterior ya fue integrado; resolver conflictos no acredita revisión.
-- [ ] Preparar PDF individual con tabla comparativa, matriz de fallos y evidencias.
+- [x] Generar PDF individual con tabla comparativa, matriz de fallos y evidencias.
+- [ ] Revisión final del PDF por el estudiante antes de entregar.
 - [ ] Grabar video individual de 3–4 minutos, cámara encendida, explicación de
   Volley/OkHttp y demostración de al menos dos fallos.
 - [ ] Verificar enlaces y archivos finales para entregar el 13 de noviembre a las 23:59.
@@ -405,7 +406,7 @@ Script: `scripts/measure_lab_clients.py`. La app conservó su PID en toda la ser
 Estos promedios describen esta implementación y este conjunto de datos; no
 establecen una clasificación universal de las librerías.
 Conteo de líneas, valoración de mantenimiento y recomendación final completados.
-Los siguientes pasos son PDF, video y Git/PR revisado.
+Los siguientes pasos son revisar el PDF generado, grabar el video y obtener revisión del PR.
 
 ## Cuadro comparativo y recomendación completados
 
@@ -420,7 +421,7 @@ logging BASIC de Retrofit en debug como límites de las mediciones.
 
 Ver [informe individual](BASE_INFORME.md) y
 [conteo de líneas](evidencias/laboratorio-lineas.json).
-Próximo paso: preparar Git/PR revisado, PDF y video individual.
+Próximo paso: obtener revisión del PR, revisar el PDF generado y grabar el video individual.
 
 ## Publicación Git verificada — 12 de noviembre de 2026
 
@@ -443,4 +444,73 @@ La actualización del enlace del PR se guarda en un commit adicional de document
 Verificación: diff sin errores de espacios, credenciales locales ignoradas y
 ausencia de JWT completos en los archivos de texto revisados. Las pruebas Android
 y backend documentadas se conservan; no se repitieron al cambiar solo documentación.
-Pendientes de entrega: revisión del compañero, PDF y video individual.
+Pendientes de entrega: revisión del compañero, revisión final del PDF y video individual.
+
+## PDF individual generado — 12 de noviembre de 2026
+
+Archivo en la raíz: [Informe_Tarea_2_5_Melvin_Pena.pdf](../Informe_Tarea_2_5_Melvin_Pena.pdf).
+Contiene 11 páginas: portada, implementación, metodología y cinco mediciones por
+cliente, cuadro comparativo completo, conteo de líneas, los cinco escenarios
+con sus quince capturas y extractos de Logcat, recomendación final y trazabilidad
+de Git/PR. Los resultados se leen de los JSON de evidencias; no se inventan mediciones.
+
+La portada usa el nombre disponible, Melvin Peña. El informe declara listado vacío,
+diferencias de creación de clientes y logging debug; no afirma revisión del
+compañero ni realización del video. No incluye credenciales ni JWT completos.
+
+Generador reproducible: `scripts/generate_report_pdf.py`, requiere Python con
+ReportLab y Pillow. Ejecutar desde la raíz: `python3 scripts/generate_report_pdf.py`.
+Se revisaron visualmente las once páginas, la integridad de las tablas, las quince
+capturas y los textos dentro de los límites de página. Tamaño aproximado: 3,59 MiB.
+El PDF se deja local para que el estudiante lo revise; no se publica automáticamente.
+Pendientes actuales: revisión final del PDF, revisión del compañero y video individual.
+
+## Registros de demostración para el laboratorio
+
+La API estaba vacía después de las pruebas que eliminaban sus propios datos.
+Se agregaron tres registros ficticios con títulos Demostración: observación de
+flora, Demostración: punto de agua y Demostración: recorrido de campo.
+El script `scripts/seed_demo_records.py` los crea si no existen, sin duplicarlos
+ni modificar/eliminar registros existentes; requiere API local activa.
+
+En Android, iniciar sesión y seleccionar Listado normal para que los tres
+clientes consulten /api/registros y muestren la cantidad actual. Para ver los
+títulos y detalles, abrir la bitácora de campo. El laboratorio muestra cantidad
+y tiempo, como exige la tarea; el endpoint de demora devuelve un arreglo vacío
+por diseño. También se pueden crear registros desde Abrir bitácora de campo →
+Nuevo registro → Guardar en el servidor.
+
+Estos datos se agregaron después de las mediciones: el PDF y las quince muestras
+originales siguen describiendo correctamente el listado de cero registros de
+aquella serie. Los datos de demostración no se presentan como una repetición
+de las mediciones ni cambian sus promedios.
+
+Verificación desde Android: Volley, OkHttp y Retrofit mostraron 3 registros.
+[Logcat de demostración](evidencias/laboratorio-datos-demo.txt); capturas
+lab-demo-volley.png, lab-demo-okhttp.png y lab-demo-retrofit.png en evidencias.
+
+## Video guía demostrativo — 13 de noviembre de 2026
+
+Generado localmente: [Video_Guia_Tarea_2_5_Melvin_Pena.mp4](../Video_Guia_Tarea_2_5_Melvin_Pena.mp4).
+Duración: 3 minutos 55 segundos; 1920×1080, H.264/AAC, narración sintética
+en español. Incluye código real de Volley, JWT, OkHttp y Retrofit y grabaciones
+reales del emulador con la interfaz actual: listado con los tres clientes,
+timeout con Volley/OkHttp, HTTP 500 con ambos y recuperación con Retrofit.
+El login se realizó antes de grabar; no se muestran credenciales ni JWT completos.
+
+La captura actual mostró 4 registros; no se modificaron datos durante el video.
+Las mediciones originales con cero registros y sus promedios se mantienen.
+El recorrido Android se acelera para ajustarse al tiempo del ejemplo y se
+identifica en pantalla. El video es una guía para replicar, no acredita la
+explicación individual con cámara exigida por la tarea.
+
+Guion con capítulos: docs/GUION_VIDEO_DEMOSTRATIVO.md.
+Verificación de las peticiones: docs/evidencias/video-demostracion-logcat.txt.
+Generadores: scripts/record_android_demo.py y scripts/generate_demo_video.py.
+Se revisaron fotogramas, resolución, duración y presencia de audio.
+Video, guion y cambios nuevos permanecen locales; no se publican automáticamente.
+
+El video guía se regeneró con resaltado de sintaxis Kotlin y leyenda visual:
+palabras clave en violeta, tipos en turquesa, funciones en amarillo, textos en
+verde y números en naranja. Se conserva la grabación real de Android y el audio.
+El generador usa Pygments para resaltar los fragmentos de código originales.
