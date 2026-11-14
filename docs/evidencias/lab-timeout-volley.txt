@@ -1,0 +1,2 @@
+11-12 07:41:02.723  6078  6078 I ComparativaHTTP: DEMORA | TimeoutError | Volley: Tiempo de espera agotado. (2015 ms).
+Proceso Android conservado; resultado visible en laboratorio.

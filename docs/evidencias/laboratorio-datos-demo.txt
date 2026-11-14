@@ -1,0 +1,4 @@
+11-12 14:09:44.737  9453  9453 I ComparativaHTTP: NORMAL | success | Volley: 3 registros recibidos en 751 ms.
+11-12 14:09:52.740  9453  9453 I ComparativaHTTP: NORMAL | success | OkHttp: 3 registros recibidos en 896 ms.
+11-12 14:09:58.231  9453  9453 I ComparativaHTTP: NORMAL | success | Retrofit: 3 registros recibidos en 979 ms.
+Datos agregados después de las mediciones originales, que usaron cero registros.

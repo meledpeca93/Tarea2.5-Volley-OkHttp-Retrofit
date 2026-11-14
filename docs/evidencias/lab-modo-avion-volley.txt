@@ -1,0 +1,2 @@
+11-12 07:42:59.657  6078  6078 I ComparativaHTTP: NORMAL | NoConnectionError <- ConnectException | Volley: No se pudo conectar con la API. Revisa la red y que el servidor esté activo. (38 ms).
+Proceso Android conservado; resultado visible en laboratorio.

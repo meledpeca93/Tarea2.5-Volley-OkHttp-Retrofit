@@ -1,0 +1,2 @@
+11-12 07:42:30.019  6078  6078 I ComparativaHTTP: NORMAL | HTTP 401 | OkHttp: Token ausente, inválido o vencido (401). (587 ms).
+Proceso Android conservado; resultado visible en laboratorio.

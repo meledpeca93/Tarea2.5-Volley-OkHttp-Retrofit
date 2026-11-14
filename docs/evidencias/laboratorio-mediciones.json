@@ -1,0 +1,137 @@
+[
+  {
+    "orden": 1,
+    "ejecucion": 1,
+    "cliente": "Volley",
+    "registros": 0,
+    "duracion_ms": 827,
+    "logcat": "11-12 07:48:20.980 12819 12819 I ComparativaHTTP: NORMAL | success | Volley: 0 registros recibidos en 827 ms.",
+    "captura": "lab-medicion-volley-1.png"
+  },
+  {
+    "orden": 2,
+    "ejecucion": 1,
+    "cliente": "OkHttp",
+    "registros": 0,
+    "duracion_ms": 854,
+    "logcat": "11-12 07:48:28.954 12819 12819 I ComparativaHTTP: NORMAL | success | OkHttp: 0 registros recibidos en 854 ms.",
+    "captura": "lab-medicion-okhttp-1.png"
+  },
+  {
+    "orden": 3,
+    "ejecucion": 1,
+    "cliente": "Retrofit",
+    "registros": 0,
+    "duracion_ms": 862,
+    "logcat": "11-12 07:48:34.463 12819 12819 I ComparativaHTTP: NORMAL | success | Retrofit: 0 registros recibidos en 862 ms.",
+    "captura": "lab-medicion-retrofit-1.png"
+  },
+  {
+    "orden": 4,
+    "ejecucion": 2,
+    "cliente": "Volley",
+    "registros": 0,
+    "duracion_ms": 48,
+    "logcat": "11-12 07:48:39.130 12819 12819 I ComparativaHTTP: NORMAL | success | Volley: 0 registros recibidos en 48 ms.",
+    "captura": "lab-medicion-volley-2.png"
+  },
+  {
+    "orden": 5,
+    "ejecucion": 2,
+    "cliente": "OkHttp",
+    "registros": 0,
+    "duracion_ms": 515,
+    "logcat": "11-12 07:48:44.101 12819 12819 I ComparativaHTTP: NORMAL | success | OkHttp: 0 registros recibidos en 515 ms.",
+    "captura": "lab-medicion-okhttp-2.png"
+  },
+  {
+    "orden": 6,
+    "ejecucion": 2,
+    "cliente": "Retrofit",
+    "registros": 0,
+    "duracion_ms": 983,
+    "logcat": "11-12 07:48:49.601 12819 12819 I ComparativaHTTP: NORMAL | success | Retrofit: 0 registros recibidos en 983 ms.",
+    "captura": "lab-medicion-retrofit-2.png"
+  },
+  {
+    "orden": 7,
+    "ejecucion": 3,
+    "cliente": "Volley",
+    "registros": 0,
+    "duracion_ms": 62,
+    "logcat": "11-12 07:48:54.133 12819 12819 I ComparativaHTTP: NORMAL | success | Volley: 0 registros recibidos en 62 ms.",
+    "captura": "lab-medicion-volley-3.png"
+  },
+  {
+    "orden": 8,
+    "ejecucion": 3,
+    "cliente": "OkHttp",
+    "registros": 0,
+    "duracion_ms": 791,
+    "logcat": "11-12 07:48:59.595 12819 12819 I ComparativaHTTP: NORMAL | success | OkHttp: 0 registros recibidos en 791 ms.",
+    "captura": "lab-medicion-okhttp-3.png"
+  },
+  {
+    "orden": 9,
+    "ejecucion": 3,
+    "cliente": "Retrofit",
+    "registros": 0,
+    "duracion_ms": 839,
+    "logcat": "11-12 07:49:05.098 12819 12819 I ComparativaHTTP: NORMAL | success | Retrofit: 0 registros recibidos en 839 ms.",
+    "captura": "lab-medicion-retrofit-3.png"
+  },
+  {
+    "orden": 10,
+    "ejecucion": 4,
+    "cliente": "Volley",
+    "registros": 0,
+    "duracion_ms": 61,
+    "logcat": "11-12 07:49:09.798 12819 12819 I ComparativaHTTP: NORMAL | success | Volley: 0 registros recibidos en 61 ms.",
+    "captura": "lab-medicion-volley-4.png"
+  },
+  {
+    "orden": 11,
+    "ejecucion": 4,
+    "cliente": "OkHttp",
+    "registros": 0,
+    "duracion_ms": 842,
+    "logcat": "11-12 07:49:15.258 12819 12819 I ComparativaHTTP: NORMAL | success | OkHttp: 0 registros recibidos en 842 ms.",
+    "captura": "lab-medicion-okhttp-4.png"
+  },
+  {
+    "orden": 12,
+    "ejecucion": 4,
+    "cliente": "Retrofit",
+    "registros": 0,
+    "duracion_ms": 817,
+    "logcat": "11-12 07:49:20.752 12819 12819 I ComparativaHTTP: NORMAL | success | Retrofit: 0 registros recibidos en 817 ms.",
+    "captura": "lab-medicion-retrofit-4.png"
+  },
+  {
+    "orden": 13,
+    "ejecucion": 5,
+    "cliente": "Volley",
+    "registros": 0,
+    "duracion_ms": 49,
+    "logcat": "11-12 07:49:25.684 12819 12819 I ComparativaHTTP: NORMAL | success | Volley: 0 registros recibidos en 49 ms.",
+    "captura": "lab-medicion-volley-5.png"
+  },
+  {
+    "orden": 14,
+    "ejecucion": 5,
+    "cliente": "OkHttp",
+    "registros": 0,
+    "duracion_ms": 869,
+    "logcat": "11-12 07:49:31.154 12819 12819 I ComparativaHTTP: NORMAL | success | OkHttp: 0 registros recibidos en 869 ms.",
+    "captura": "lab-medicion-okhttp-5.png"
+  },
+  {
+    "orden": 15,
+    "ejecucion": 5,
+    "cliente": "Retrofit",
+    "registros": 0,
+    "duracion_ms": 846,
+    "logcat": "11-12 07:49:36.650 12819 12819 I ComparativaHTTP: NORMAL | success | Retrofit: 0 registros recibidos en 846 ms.",
+    "captura": "lab-medicion-retrofit-5.png"
+  }
+]

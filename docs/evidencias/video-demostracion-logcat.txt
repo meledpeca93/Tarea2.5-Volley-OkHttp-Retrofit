@@ -1,0 +1,8 @@
+11-13 20:04:57.419 19235 19235 I ComparativaHTTP: NORMAL | success | Volley: 4 registros recibidos exitosamente en 818 ms.
+11-13 20:05:07.051 19235 19235 I ComparativaHTTP: NORMAL | success | OkHttp: 4 registros recibidos exitosamente en 1028 ms.
+11-13 20:05:13.425 19235 19235 I ComparativaHTTP: NORMAL | success | Retrofit: 4 registros recibidos exitosamente en 669 ms.
+11-13 20:05:29.522 19235 19235 I ComparativaHTTP: DEMORA | TimeoutError | Volley: Tiempo de espera agotado (Timeout). (2026 ms).
+11-13 20:05:40.030 19235 19235 I ComparativaHTTP: DEMORA | SocketTimeoutException <- SocketException | OkHttp: Tiempo de espera agotado (Timeout). (2156 ms).
+11-13 20:05:54.550 19235 19235 I ComparativaHTTP: ERROR | HTTP 500 | Volley: Error interno del servidor (500). (605 ms).
+11-13 20:06:03.558 19235 19235 I ComparativaHTTP: ERROR | HTTP 500 | OkHttp: Error interno del servidor (500). (690 ms).
+11-13 20:06:18.609 19235 19235 I ComparativaHTTP: NORMAL | success | Retrofit: 4 registros recibidos exitosamente en 740 ms.

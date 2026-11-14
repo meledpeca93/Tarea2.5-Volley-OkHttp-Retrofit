@@ -1,0 +1,2 @@
+11-12 07:40:50.435  6078  6078 I ComparativaHTTP: ERROR | HTTP 500 | Retrofit: Error interno del servidor (500). (838 ms).
+Proceso Android conservado; resultado visible en laboratorio.

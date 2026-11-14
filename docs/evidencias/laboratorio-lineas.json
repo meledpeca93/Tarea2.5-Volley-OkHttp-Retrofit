@@ -1,0 +1,14 @@
+{
+  "criterio": "Líneas físicas no vacías; excluye comentarios completos, package e imports; incluye llaves y firmas. UI excluida.",
+  "adaptadores_activity": {
+    "Volley": 26,
+    "OkHttp": 42,
+    "Retrofit": 18
+  },
+  "auxiliar_okhttp_httpClient": 8,
+  "archivos_retrofit_compartidos_completos": {
+    "data/remote/RegistroApi.kt": 15,
+    "data/remote/ApiClient.kt": 31,
+    "data/repository/RegistroRepository.kt": 89
+  }
+}

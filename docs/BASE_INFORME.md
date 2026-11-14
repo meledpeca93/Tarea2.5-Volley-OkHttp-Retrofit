@@ -7,11 +7,14 @@
 - Modalidad: individual; valor: 5 puntos / 5 %.
 - Entrega: 13 de noviembre de 2026, a las 23:59, según el enunciado.
 - Repositorio local: Tarea2.5-Volley-OkHttp-Retrofit.
-- URL del repositorio del equipo: pendiente de confirmar.
-- URL del pull request y revisión del compañero: pendientes de verificar.
-- Documento de trabajo actualizado: 11 de noviembre de 2026.
+- Repositorio: https://github.com/meledpeca93/Tarea2.5-Volley-OkHttp-Retrofit
+- Confirmar que corresponde al repositorio del equipo exigido por el enunciado.
+- PR utilizado: https://github.com/meledpeca93/Tarea2.5-Volley-OkHttp-Retrofit/pull/3
+- PR #3 integrado en main; revisión de otro integrante no acreditada.
+- PR de entrega actual: https://github.com/meledpeca93/Tarea2.5-Volley-OkHttp-Retrofit/pull/4
+- Documento de trabajo actualizado: 12 de noviembre de 2026.
 
-Este archivo es la base del futuro PDF. Los resultados pendientes no representan
+Este archivo es la fuente de contenido del PDF individual generado. Los resultados pendientes no representan
 pruebas ejecutadas ni deben presentarse como evidencia de cumplimiento.
 
 ## Contexto y objetivo
@@ -26,22 +29,18 @@ de JWT, la conversión de respuestas, los tiempos y el comportamiento ante fallo
 | Requisito | Estado y evidencia disponible |
 | --- | --- |
 | Pantalla de laboratorio con tres clientes | Implementada en ComparativaActivity.kt |
-| GET /api/registros | Configurado en los tres clientes; falta validación real |
+| GET /api/registros | Verificado con JWT en los tres clientes; ver evidencias/jwt-android.txt |
 | JWT en Authorization | Verificado: acceso válido y 401 sin token en los tres clientes |
 | Volley: JsonArrayRequest, getHeaders y DefaultRetryPolicy | Implementado |
 | OkHttp: Request manual, enqueue y Gson | Implementado |
 | Cantidad de registros y duración | Implementadas |
 | Manejo del hilo de OkHttp | Usa runOnUiThread |
 | Reutilización del repositorio Retrofit de tarea 2.3 | Implementada: CRUD y laboratorio usan RegistroRepository |
-| Cinco escenarios de fallo por cliente | Pendientes: 15 casos |
-| Cinco consultas exitosas por cliente | Pendientes: 15 mediciones |
+| Cinco escenarios de fallo por cliente | Verificados: 15 casos; ver evidencias/LABORATORIO_FALLOS.md |
+| Cinco consultas exitosas por cliente | Verificadas: 15 mediciones; ver evidencias/LABORATORIO_MEDICIONES.md |
 | Rama personal, commits y PR revisado | Pendiente de ordenar/verificar |
-| PDF con evidencias y recomendación | Pendiente; este documento es una base |
+| PDF con evidencias y recomendación | Generado en la raíz; pendiente de revisión final del estudiante |
 | Video individual con cámara, 3–4 minutos | Pendiente |
-
-Se verificó una compilación exitosa mediante `./gradlew :app:assembleDebug`
-después de las correcciones. En una ejecución anterior se instaló y abrió la app
-en el Pixel 4 XL. Esto no demuestra que los cinco escenarios estén superados.
 
 ## Implementación y correcciones realizadas
 
@@ -77,77 +76,209 @@ interpretar los resultados y no permite concluir rendimiento general de las libr
 
 | Cliente | t1 (ms) | t2 (ms) | t3 (ms) | t4 (ms) | t5 (ms) | Promedio (ms) |
 | --- | --- | --- | --- | --- | --- | --- |
-| Volley | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
-| OkHttp | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
-| Retrofit | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
+| Volley | 827 | 48 | 62 | 61 | 49 | 209.40 |
+| OkHttp | 854 | 515 | 791 | 842 | 869 | 774.20 |
+| Retrofit | 862 | 983 | 839 | 817 | 846 | 869.40 |
 
 ## Pruebas de fallos y evidencias
 
-Para cada fila, ejecutar los tres clientes. Registrar fecha, configuración,
-clase de excepción o estado HTTP, mensaje visible, tiempo, ausencia/presencia de
-cierre inesperado y ruta de captura o Logcat. No guardar credenciales en evidencias.
+Resultados reales del 12 de noviembre: 15 casos. Todos conservaron el proceso de la app.
 
-| Escenario | Preparación | Volley | OkHttp | Retrofit | Evidencias |
-| --- | --- | --- | --- | --- | --- |
-| API detenida | Detener la API manteniendo la red disponible | Pendiente | Pendiente | Pendiente | Pendiente |
-| Modo avión | Activarlo y comprobar que Wi-Fi/datos estén realmente desactivados | Pendiente | Pendiente | Pendiente | Pendiente |
-| Timeout | Endpoint temporal de API con await Task.Delay superior al timeout; adaptar los tres clientes al mismo endpoint | Pendiente | Pendiente | Pendiente | Pendiente |
-| HTTP 401 | Omitir JWT o usar uno vencido en endpoint protegido | Pendiente | Pendiente | Pendiente | Pendiente |
-| HTTP 500 | Preparar un fallo controlado en la API de desarrollo | Pendiente | Pendiente | Pendiente | Pendiente |
-
-La app todavía fija api/registros: el endpoint temporal para timeout y la
-provocación controlada de 500 requieren integración con el backend. Un JSON
-simulado o una compilación exitosa no sustituye estas pruebas.
-
-Plantilla de registro por ejecución:
-
-- Identificador / fecha / cliente / escenario:
-- Dispositivo, versión de app y timeout:
-- Preparación realizada:
-- Error técnico recibido:
-- Mensaje que vio el usuario:
-- Duración y continuidad de la app:
-- Captura o Logcat:
-
-## Cuadro comparativo preliminar
-
-Descripción basada en el código actual, pendiente de completar con datos medidos.
-
-| Criterio | Volley | OkHttp | Retrofit |
+| Escenario | Volley (ms) | OkHttp (ms) | Retrofit (ms) |
 | --- | --- | --- | --- |
-| Líneas de código | Pendiente de contar | Pendiente de contar | Pendiente de contar incluyendo interfaz |
-| Encabezados | getHeaders | addHeader en Request.Builder | @Header y @Headers |
-| JSON | JsonArrayRequest entrega JSONArray | Gson manual a List<JsonObject> | GsonConverterFactory a List<RegistroResumen> |
-| Hilo del callback actual | Principal | Trabajo; se usa runOnUiThread | Principal con configuración Android predeterminada |
-| Errores | VolleyError y networkResponse.statusCode | IOException y estado de Response | onFailure y Response.code |
-| Reintentos | DefaultRetryPolicy con 0 | retryOnConnectionFailure(false) | Mismo ajuste de OkHttp |
-| Timeout | Socket mediante DefaultRetryPolicy | Conexión, lectura y escritura | Cliente OkHttp configurado |
-| Prueba y mantenimiento | Evaluar tras las pruebas | Evaluar tras las pruebas | Evaluar tras integrar tarea 2.3 |
-| Promedio de cinco consultas | Pendiente | Pendiente | Pendiente |
+| API detenida | 143 | 177 | 206 |
+| Modo avión sin red | 38 | 15 | 37 |
+| Timeout | 2015 | 2092 | 2437 |
+| JWT ausente (401) | 999 | 587 | 1006 |
+| HTTP 500 | 639 | 754 | 838 |
 
-Para contar líneas, documentar si se incluyen blancos, comentarios, auxiliares,
-interfaz y código compartido. Excluir decoración visual y usar el mismo criterio
-para los tres clientes. La valoración de mantenimiento debe justificar ejemplos
-concretos del código, no solo preferencias.
+Estos tiempos corresponden a errores y no sustituyen las mediciones exitosas.
+La tabla detallada incluye errores técnicos, mensajes y enlaces individuales a capturas/Logcat:
+[evidencias verificadas](evidencias/LABORATORIO_FALLOS.md).
 
-## Recomendación provisional
+## Selector de escenarios y pruebas realizadas
 
-Retrofit es un candidato para el proyecto final por declarar el contrato en una
-interfaz y delegar la conversión JSON. La recomendación definitiva debe incorporar
-las mediciones reales, los errores observados y la integración del repositorio
-existente. No se afirma todavía que sea el cliente más rápido.
+En ComparativaActivity se agregó un Spinner con rutas fijas definidas en
+`data/remote/EscenarioLaboratorio.kt`:
 
-## Ruta para completar la entrega
+| Selección | Ruta GET | Resultado esperado |
+| --- | --- | --- |
+| Listado normal | /api/registros | Arreglo de registros |
+| Tiempo de espera | /api/pruebas/demora | Demora de 15 segundos, superior al timeout de prueba |
+| Error interno | /api/pruebas/error | HTTP 500 controlado |
 
-1. Confirmar repositorio del equipo y recuperar el repositorio Retrofit de tarea 2.3.
-2. Llevar el trabajo a feature/comparativa-melvin-pena sin perder cambios y hacer commits descriptivos.
-3. Validar consulta autenticada real con los tres clientes.
-4. Ejecutar y documentar las 15 pruebas de fallo.
-5. Registrar las 15 mediciones exitosas y completar el cuadro.
-6. Redactar conclusiones, incorporar capturas y exportar PDF.
-7. Crear/verificar PR hacia principal y solicitar revisión de otro integrante.
-8. Grabar video individual con cámara: explicar Volley y OkHttp y mostrar al menos dos fallos.
-9. Entregar enlace de PR, PDF y video según el aula.
+Volley y OkHttp construyen la URL con la ruta seleccionada. Retrofit llama
+`RegistroRepository.consultarLaboratorio`; el caso normal delega en `listar`
+y los otros usan `RegistroApi.consultarLaboratorio` con `@Url` y `@Header`.
+Los tres conservan JWT y timeout configurados. URL, JWT, timeout y selector quedan
+bloqueados durante una solicitud. Logcat incluye escenario y error, sin JWT ni cuerpos.
+Release ofrece solo listado normal; el backend registra las rutas de fallo
+exclusivamente en Development y exige autenticación.
+
+Verificación ejecutada: `./gradlew :app:assembleDebug`, `./gradlew :app:installDebug`
+y `dotnet build backend/Bitacora.sln`. Compilación e instalación correctas.
+Los 15 fallos se ejecutaron con timeout de 2000 ms y JWT válido salvo el caso 401.
+El 401 documentado en Android corresponde a token ausente; la expiración también
+se probó en API durante la fase JWT, sin atribuirla a esta matriz Android.
+
+[Tabla completa de fallos, capturas y Logcat](evidencias/LABORATORIO_FALLOS.md).
+Datos estructurados: `evidencias/laboratorio-fallos.json`.
+Script reproducible: `scripts/verify_lab_failures.py`; requiere APK instalada,
+emulador, backend compilado y puerto 5000 libre. Deja su API activa y restaura la red.
+No modifica registros. Se comprobó resultado visible, actividad de laboratorio
+y conservación del PID, sin cierre inesperado en los 15 casos.
+
+La primera automatización falló al seleccionar un botón por la evaluación de un
+nodo XML; se corrigió el script antes de guardar resultados. La evidencia inicial
+de red se tomó durante la transición de modo avión: se repitieron únicamente
+esos tres casos tras confirmar ausencia de red predeterminada activa. Las capturas
+y Logcat actuales corresponden a las ejecuciones finales. Las horas de Logcat
+pertenecen al reloj del emulador. La red quedó restaurada (avión 0, Wi-Fi 1).
+
+## Cuadro comparativo final
+
+Comparación del código y de las pruebas reales del 12 de noviembre de 2026.
+
+| Criterio | Volley | OkHttp directo | Retrofit |
+| --- | --- | --- | --- |
+| Líneas del adaptador en Activity | 26 | 42 | 18; delega en el repositorio, no es el total |
+| Envío de encabezados | Sobrescribe getHeaders; Authorization y Cache-Control | Request.Builder.addHeader; Authorization y Cache-Control | @Header para JWT; @Headers para caché; repositorio resuelve sesión o token explícito |
+| Conversión JSON | JsonArrayRequest entrega JSONArray; se cuenta length, sin mapeo a DTO | Gson manual con TypeToken a List<JsonObject>; se cuenta size | GsonConverterFactory a List<RegistroResumen> con DTO tipado |
+| Hilo de respuesta | Principal en esta cola Android | Trabajo; runOnUiThread para publicar en pantalla | Principal en configuración Android actual; repositorio entrega ApiResult |
+| Error HTTP | VolleyError.networkResponse.statusCode | Response.code, distinto de onFailure de transporte | Response.code y ApiResult.Failure.httpCode en repositorio |
+| Error de conexión/timeout | NoConnectionError/ConnectException y TimeoutError observados | ConnectException y SocketTimeoutException observados | onFailure recibe ConnectException/SocketTimeoutException; repositorio traduce a ApiResult.Failure |
+| Reintentos | DefaultRetryPolicy con 0 reintentos | retryOnConnectionFailure(false) | Igual ajuste en ApiClient basado en OkHttp |
+| Tiempo de espera | Socket mediante DefaultRetryPolicy | connectTimeout, readTimeout y writeTimeout | Los tres ajustes en el OkHttp de ApiClient |
+| Caché | Solicitud sin caché y Cache-Control: no-cache, no-store | Sin caché de disco y mismo Cache-Control | Sin caché de disco y mismo Cache-Control |
+| Cancelación | Tag de Activity y cancelAll al destruir | Conserva Call y ejecuta cancel al destruir | RequestHandle del repositorio y cancel al destruir |
+| Facilidad de prueba actual | Verificado por UI; callback y construcción de solicitud están en Activity | Verificado por UI; Request explícito ayuda a inspeccionar transporte, pero hay callbacks, JSON y UI juntos | Verificado por UI; contrato y errores centralizados facilitan reutilizar casos; constructor actual crea servicio internamente y requeriría inyección para pruebas unitarias aisladas |
+| Mantenimiento | Conciso para obtener un arreglo; un cambio de campos requeriría añadir mapeo/validación a objetos | Mayor control manual; hay que mantener cierre de Response, Gson, estados HTTP y cambios de hilo | Contrato y DTO compartidos con CRUD; cambios de rutas/tipos y traducción de errores quedan centralizados |
+| Cinco consultas exitosas (ms) | 827, 48, 62, 61, 49 | 854, 515, 791, 842, 869 | 862, 983, 839, 817, 846 |
+| Promedio (ms) | 209,40 | 774,20 | 869,40 |
+| Cinco fallos por cliente | 5/5, sin cierre inesperado | 5/5, sin cierre inesperado | 5/5, sin cierre inesperado |
+
+### Criterio del conteo de líneas
+
+Se cuentan líneas físicas de Kotlin no vacías, incluidas firmas, llaves y cierres.
+Se excluyen líneas completas de comentario, package, imports y decoración visual.
+Cada línea cuenta una vez aunque contenga varias instrucciones. El conteo mide
+este formato del código, no complejidad ni rendimiento.
+
+La fila principal cuenta únicamente los métodos `requestWithVolley`,
+`requestWithOkHttp` y `requestWithRetrofit` en ComparativaActivity, desde su firma
+hasta antes del siguiente método. Los auxiliares no se ocultan ni se suman como
+si representaran implementaciones independientes equivalentes:
+
+| Soporte fuera de los adaptadores | Líneas | Alcance |
+| --- | --- | --- |
+| httpClient en ComparativaActivity | 8 | Configuración usada por OkHttp directo |
+| RegistroApi.kt completo | 15 | Interfaz Retrofit, anotaciones y DTO; incluye CRUD y rutas de laboratorio |
+| ApiClient.kt completo | 31 | Fábrica Retrofit/OkHttp, timeouts, conversor y logging debug |
+| RegistroRepository.kt completo | 89 | Repositorio, ApiResult y RequestHandle; CRUD, autorización y errores compartidos |
+
+Volley también depende de la creación de su RequestQueue en onCreate. Los tres
+usan auxiliares de UI, reloj, validación, escenario, encabezados o resultados;
+no se atribuyen esas líneas compartidas a una librería. El ciclo de vida y la
+cola quedan fuera del conteo de los adaptadores. Los archivos Retrofit completos
+incluyen funciones que no necesita exclusivamente este GET; sumarlos como costo
+mínimo del listado daría una comparación engañosa. Las 18 líneas de Retrofit
+expresan la delegación desde la pantalla, no una reducción total equivalente.
+
+Reproducción desde la raíz: `python3 scripts/count_lab_lines.py`.
+Salida: [conteo estructurado](evidencias/laboratorio-lineas.json).
+
+### Interpretación de las pruebas
+
+Volley obtuvo el menor promedio observado en esta serie de cinco solicitudes.
+Todos manejaron los cinco fallos: API detenida, modo avión sin red activa,
+timeout, JWT ausente (401) y error 500. El caso 401 Android usó token ausente;
+no se presenta como una prueba de expiración Android. El repositorio Retrofit
+muestra un mensaje de conexión más general; los errores técnicos están en Logcat.
+
+Las mediciones usaron un arreglo vacío (0 registros), emulador Pixel 4 XL,
+API local Development, JWT válido, timeout de 2000 ms y cinco rondas en orden
+Volley → OkHttp → Retrofit. No hubo calentamiento del listado en este proceso;
+login y pruebas previas ya habían usado la API. Se incluyen todas las muestras,
+incluso la primera. El contenido de datos fue idéntico antes y después.
+
+El reloj incluye preparación, red, conversión y entrega a UI. Volley reutiliza
+cola; OkHttp/Retrofit crean cliente por consulta. Retrofit además activa logging
+BASIC en debug mediante ApiClient. La conversión de Volley solo produce JSONArray,
+OkHttp usa JsonObject y Retrofit DTO tipado. Estas diferencias y el arreglo vacío
+limitan la comparación de rendimiento: no se demuestra velocidad general ni costo
+de deserializar registros reales. Los timeouts tampoco son un límite total de
+extremo a extremo. No se midió carga concurrente ni se ejecutaron pruebas unitarias
+con servicios inyectados; la facilidad de prueba es una valoración del diseño.
+
+Consultar [las 15 mediciones y sus evidencias](evidencias/LABORATORIO_MEDICIONES.md)
+y [los 15 fallos con capturas y Logcat](evidencias/LABORATORIO_FALLOS.md).
+
+## Recomendación final
+
+Recomiendo Retrofit para el proyecto final de Bitácora de campo. El proyecto ya
+comparte RegistroRepository entre el CRUD MVVM y el laboratorio; sus contratos
+usan DTO tipados y centralizan autorización, conversión y errores. Si cambia un
+campo o una respuesta del backend, ese diseño reduce los puntos de adaptación
+en las pantallas. Para nuevas operaciones CRUD mantiene un contrato explícito
+en RegistroApi y evita repetir manejo manual de Response y cambios de hilo.
+
+La recomendación se apoya en esa estructura y en los cinco fallos manejados sin
+cierre, no en una ventaja de velocidad: Retrofit tuvo 869,40 ms de promedio,
+frente a 774,20 ms de OkHttp y 209,40 ms de Volley en esta serie. Los tres
+cumplieron el manejo de errores. Volley es una opción práctica para consultas
+sencillas de arreglos; OkHttp directo resulta útil cuando se necesita controlar
+el transporte y aceptar más código manual. En este proyecto, la reutilización
+y los DTO de Retrofit pesan más que el promedio de un listado vacío.
+
+Como mejora futura, conviene inyectar el servicio/cliente y reutilizar el cliente
+HTTP para facilitar pruebas aisladas y estudiar costos de preparación. Eso no se
+implementó ni se atribuye a las mediciones actuales. Una comparación de rendimiento
+más amplia requeriría registros reales y condiciones de construcción equivalentes.
+
+## Punto de continuación — pendientes de tarea 2.5
+
+Estado actualizado al 12 de noviembre de 2026.
+
+### Completado
+
+- [x] Laboratorio con Volley, OkHttp y Retrofit, JWT, cantidad y duración.
+- [x] Retrofit reutiliza RegistroRepository del CRUD.
+- [x] Selector de listado, demora y HTTP 500 compartido por los tres clientes.
+- [x] Rutas de fallos limitadas a Development; selector de fallos solo en debug.
+- [x] Compilación API sin errores ni advertencias e instalación debug en Pixel 4 XL.
+- [x] Cinco escenarios por cliente: 15 casos con captura y Logcat, sin cierre.
+- [x] Red restaurada y API reiniciada después de las pruebas.
+
+### Pendientes en orden
+
+- [x] Realizar cinco consultas exitosas por cliente: 15 mediciones con el mismo
+  endpoint, JWT válido, dispositivo, datos, timeout y condiciones de red.
+- [x] Calcular promedios y completar cuadro comparativo: conteo de líneas con
+  criterio explícito, encabezados, JSON, hilo, errores, reintentos/timeouts y mantenimiento.
+- [x] Redactar recomendación final con resultados reales.
+- [x] Ordenar rama personal según el enunciado: feature/comparativa-melvin-pena.
+  Se conserva el historial previo y se incorpora main sin reescribir commits.
+- [x] Publicar y verificar commits de selector, pruebas, evidencias y documentación.
+- [x] Abrir PR de continuación hacia main: [PR #4](https://github.com/meledpeca93/Tarea2.5-Volley-OkHttp-Retrofit/pull/4).
+- [ ] Obtener revisión real de otro integrante antes de integrar el PR #4.
+  El PR #3 anterior ya fue integrado; resolver conflictos no acredita revisión.
+- [x] Generar PDF individual con tabla comparativa, matriz de fallos y evidencias.
+- [ ] Revisión final del PDF por el estudiante antes de entregar.
+- [ ] Grabar video individual de 3–4 minutos, cámara encendida, explicación de
+  Volley/OkHttp y demostración de al menos dos fallos.
+- [ ] Verificar enlaces y archivos finales para entregar el 13 de noviembre a las 23:59.
+
+### Cómo retomar
+
+1. Comprobar API y emulador; no repetir fallos ya verificados salvo cambios o dudas.
+2. Iniciar sesión si el token de 15 minutos venció. Consultar credenciales solo
+   en backend/Bitacora.Api/.dev-login.json, sin publicarlas ni modificar su contraseña.
+3. Continuar con rama/commits/PR revisado y preparación del PDF y video.
+   Las 15 mediciones exitosas ya están guardadas; no repetirlas salvo cambios o dudas.
+4. Declarar el orden y las condiciones; excluir tiempos fallidos de los promedios.
+
+Dictado real, orientación EXIF y persistencia de sesión son asuntos de tarea 2.3
+fuera del alcance actual. No bloquean los siguientes pasos de la tarea 2.5.
 
 ## Guion sugerido del video
 
@@ -157,199 +288,110 @@ existente. No se afirma todavía que sea el cliente más rápido.
 - 2:10–3:20: demostración de dos escenarios de fallo reales.
 - 3:20–3:50: resultados y recomendación con palabras propias.
 
+## Mediciones exitosas completadas (12 de noviembre de 2026)
 
-## Actualización del alcance
+Se realizaron cinco consultas autenticadas de listado por cliente, en cinco
+rondas Volley → OkHttp → Retrofit, timeout de 2000 ms, mismo emulador y datos.
+No se ejecutó calentamiento del listado en este proceso; el login ocurrió antes.
+La API ya estaba activa por las pruebas anteriores. Los datos conservaron el mismo
+contenido antes y después. No se añadieron ni eliminaron registros de prueba.
 
-Se confirmó que tanto la API de tarea 2.2 como el cliente MVVM de tarea 2.3 deben
-crearse desde cero. Las indicaciones anteriores de recuperar un repositorio
-Retrofit existente se sustituyen por construir ese repositorio y reutilizarlo
-en el laboratorio. Se requiere el enunciado 2.2 antes de cerrar el contrato y
-las validaciones del servidor. No hay aún CRUD ni backend funcional acreditado.
+[Metodología, quince muestras, promedios y evidencias](evidencias/LABORATORIO_MEDICIONES.md).
+Script: `scripts/measure_lab_clients.py`. La app conservó su PID en toda la serie.
+Estos promedios describen esta implementación y este conjunto de datos; no
+establecen una clasificación universal de las librerías.
+Conteo de líneas, valoración de mantenimiento y recomendación final completados.
+Los siguientes pasos son revisar el PDF generado, grabar el video y obtener revisión del PR.
 
-Se prepararon dependencias MVVM, fábrica HTTP, estados de pantalla y restricción
-de HTTP a 10.0.2.2 en debug. Esta infraestructura no demuestra que los requisitos
-funcionales de tarea 2.3 estén cumplidos.
+## Cuadro comparativo y recomendación completados
 
+La base del informe contiene la comparación final de encabezados, JSON, hilos,
+errores, reintentos, timeouts, pruebas, mantenimiento y promedios medidos.
+Conteo reproducible: `python3 scripts/count_lab_lines.py`; adaptadores de Activity:
+Volley 26, OkHttp 42 y Retrofit 18 líneas, con soporte compartido informado aparte.
+Se recomienda Retrofit por DTO, repositorio reutilizado y errores centralizados;
+Volley obtuvo el menor promedio de esta serie. No se infiere rendimiento general.
+La recomendación declara arreglo vacío, creación de clientes por consulta y
+logging BASIC de Retrofit en debug como límites de las mediciones.
 
-## Avance: backend de tarea 2.2 implementado
+Ver el cuadro comparativo de este documento y el
+[conteo de líneas](evidencias/laboratorio-lineas.json).
+Próximo paso: obtener revisión del PR, revisar el PDF generado y grabar el video individual.
 
-- Solución `backend/Bitacora.sln` con Domain, Application, Infrastructure y Api.
-- Registro con ID entero, título, descripción, foto Base64 opcional y fecha del servidor.
-- DTO separados para listado sin foto y detalle; servicio con cinco casos de uso.
-- Repositorio EF Core SQLite, migración InitialCreate generada y aplicada a la base local.
-- Validación por campo y manejo global con ProblemDetails genérico para 500.
-- OpenAPI exportado en backend/openapi.json y Swagger UI en /swagger (Development).
-- Colección Postman exportada y entorno baseUrl incluidos en postman/.
-- Rutas de demora 15 s y error 500 registradas únicamente en Development.
-- .gitignore excluye bin, obj y bases SQLite.
+## Publicación Git verificada — 12 de noviembre de 2026
 
-Verificación ejecutada: `dotnet build backend/Bitacora.sln` terminó sin errores ni
-advertencias. La colección final se ejecutó contra la API real local: 17 solicitudes,
-25 aserciones, 0 fallos, exit code 0. Evidencia:
-`docs/evidencias/postman-api-local.txt`. Comprueba CRUD, Location, listado sin foto,
-404, validación de título/descripción/Base64 y 500 sin excepción interna en el cuerpo.
-No acredita aún el límite exacto de 2 MiB con una prueba de frontera, JWT, ni fallos
-observados desde Android. Los tiempos de Postman no son las mediciones Android.
+Rama: `feature/comparativa-melvin-pena`, publicada en origin sin force push.
+La rama ya existía; se actualizó con fast-forward conservando el historial.
+Los conflictos resueltos por el estudiante en el PR #3 ya estaban en main;
+se incorporaron antes de preparar los cambios nuevos.
 
-La opción de reporte --output del CLI exigió login; se guardó salida de consola
-sin publicar resultados. Siguen pendientes capturas visuales, distribución del
-trabajo, PDF y participación/revisión real en GitHub. La fase Android 2.3 continúa
-pendiente: no se debe presentar el backend como cumplimiento del cliente MVVM.
+Commits de esta continuación:
 
+- `c0ff331`: selector de escenarios compartidos en laboratorio HTTP.
+- `dcee07d`: scripts, quince fallos y quince mediciones con sus evidencias.
+- `8654ba5`: cuadro comparativo, recomendación y documentación actualizada.
 
-## Avance Android — integración de tarea 2.3
+PR abierto hacia main: [#4](https://github.com/meledpeca93/Tarea2.5-Volley-OkHttp-Retrofit/pull/4).
+El PR #3 anterior está integrado. El PR #4 queda abierto para revisión real de
+otro integrante; no se atribuye aprobación ni participación aún no realizadas.
+La actualización del enlace del PR se guarda en un commit adicional de documentación.
 
-Se implementó la bitácora con ViewModel/LiveData, repositorio Retrofit compartido,
-DTO tipados, listado RecyclerView, detalle, creación/edición y eliminación con
-confirmación. El laboratorio Retrofit ya reutiliza el mismo RegistroRepository.
-La captura reduce a 1024 px y JPEG 70 antes de enviar Base64; el formulario permite
-obtener la descripción mediante RecognizerIntent y valida límites del contrato.
-Se muestran Loading con controles deshabilitados, Empty, Success y Error; los
-400 del servidor se presentan con sus detalles por campo.
+Verificación: diff sin errores de espacios, credenciales locales ignoradas y
+ausencia de JWT completos en los archivos de texto revisados. Las pruebas Android
+y backend documentadas se conservan; no se repitieron al cambiar solo documentación.
+Pendientes de entrega: revisión del compañero, revisión final del PDF y video individual.
 
-La compilación/instalación Android y la consulta de listado vacío en Pixel fueron
-verificadas. Ver el reporte `docs/evidencias/android-crud-smoke.txt` para el resultado
-final del recorrido CRUD desde UI; no confundirlo con pruebas de cámara/voz ni con
-los quince escenarios de comparación, que siguen pendientes.
+## PDF individual generado — 12 de noviembre de 2026
 
-Pendientes principales para 2.5: JWT, selección de endpoints de fallo, quince
-escenarios documentados y quince mediciones exitosas. Para entrega: PDF, videos,
-capturas de Logcat y revisión real del PR. No se consideran cumplidos por compilar.
+Archivo en la raíz: [Informe_Tarea_2_5_Melvin_Pena.pdf](../Informe_Tarea_2_5_Melvin_Pena.pdf).
+Contiene 11 páginas: portada, implementación, metodología y cinco mediciones por
+cliente, cuadro comparativo completo, conteo de líneas, los cinco escenarios
+con sus quince capturas y extractos de Logcat, recomendación final y trazabilidad
+de Git/PR. Los resultados se leen de los JSON de evidencias; no se inventan mediciones.
 
+La portada usa el nombre disponible, Melvin Peña. El informe declara listado vacío,
+diferencias de creación de clientes y logging debug; no afirma revisión del
+compañero ni realización del video. No incluye credenciales ni JWT completos.
 
-## Evidencias Android verificadas (11 de noviembre de 2026)
+Generador reproducible: `scripts/generate_report_pdf.py`, requiere Python con
+ReportLab y Pillow. Ejecutar desde la raíz: `python3 scripts/generate_report_pdf.py`.
+Se revisaron visualmente las once páginas, la integridad de las tablas, las quince
+capturas y los textos dentro de los límites de página. Tamaño aproximado: 3,59 MiB.
+El PDF se deja local para que el estudiante lo revise; no se publica automáticamente.
+Pendientes actuales: revisión final del PDF, revisión del compañero y video individual.
 
-| Prueba | Resultado | Evidencia |
-| --- | --- | --- |
-| CRUD desde UI y verificación en API | Pasó: crear, consultar, editar y eliminar; cancelar borrado conserva datos | evidencias/android-crud-smoke.txt |
-| Foto desde cámara del emulador | Pasó: JPEG 768×1024, 13 234 bytes; enviada Base64 y recuperada del backend | evidencias/android-fotografia.txt |
-| Modo avión + Wi-Fi apagado | Pasó: mensaje sin conexión, Reintentar y recuperación tras restaurar red | evidencias/android-conexion.txt |
-| API detenida con red activa | Ver reporte de ejecución | evidencias/android-api-detenida.txt |
-| Peticiones/respuestas en Logcat | Capturadas sin cuerpos ni credenciales | evidencias/android-http-logcat.txt |
+## Datos de demostración posteriores a las mediciones
 
-Capturas: android-crud-creado.png, android-crud-eliminado.png,
-android-formulario-fotografia.png, android-detalle-fotografia.png y
-android-sin-conexion.png. La imagen en la carpeta depuracion corresponde a un fallo
-previo del script y no debe utilizarse como evidencia final del comportamiento.
-Los registros creados por las pruebas exitosas fueron eliminados.
+Se agregaron tres registros ficticios a la API local, con
+`scripts/seed_demo_records.py`, que evita duplicarlos y conserva otros datos.
+Se verificó desde Android que Volley, OkHttp y Retrofit muestran 3 registros
+al seleccionar Listado normal. Para ver títulos y detalles se abre la bitácora.
+[Logcat de demostración](evidencias/laboratorio-datos-demo.txt); capturas
+lab-demo-volley.png, lab-demo-okhttp.png y lab-demo-retrofit.png en evidencias.
+El endpoint de demora devuelve un arreglo vacío por diseño.
 
-Estas pruebas acreditan la bitácora Retrofit. No completan la matriz de quince
-fallos de la tarea 2.5 ni la media de cinco ejecuciones por cliente. Falta dictado
-real por micrófono, protección JWT, mediciones y entregables académicos.
+Estos datos fueron creados después de las quince mediciones originales. No
+cambian sus promedios ni el conjunto vacío declarado en el PDF. El PDF, su
+generador y esta documentación posterior permanecen locales para revisión;
+no se han publicado en GitHub.
 
+## Video guía demostrativo — 13 de noviembre de 2026
 
-## Avance JWT de tarea 2.5
+Generado localmente: [Video_Guia_Tarea_2_5_Melvin_Pena.mp4](../Video_Guia_Tarea_2_5_Melvin_Pena.mp4).
+Duración: 3 minutos 55 segundos; 1920×1080, H.264/AAC, narración sintética
+en español. Incluye código real de Volley, JWT, OkHttp y Retrofit y grabaciones
+reales del emulador con la interfaz actual: listado con los tres clientes,
+timeout con Volley/OkHttp, HTTP 500 con ambos y recuperación con Retrofit.
+El login se realizó antes de grabar; no se muestran credenciales ni JWT completos.
 
-Se implementaron protección JwtBearer del CRUD, login local de laboratorio y
-sesión Android en memoria. El mismo token se precarga para Volley, OkHttp y
-Retrofit. Las credenciales se generan localmente, fuera de Git, y no se deben
-incluir en el PDF/video/Logcat. El token dura 15 minutos.
+La captura actual mostró 4 registros; no se modificaron datos durante el video.
+Las mediciones originales con cero registros y sus promedios se mantienen.
+El recorrido Android se acelera para ajustarse al tiempo del ejemplo y se
+identifica en pantalla. El video es una guía para replicar, no acredita la
+explicación individual con cámara exigida por la tarea.
 
-La verificación agrupada se documenta en evidencias/jwt-api.txt,
-evidencias/jwt-android.txt y evidencias/postman-api-jwt.txt al finalizar su ejecución.
-Distinguir esos resultados de las pruebas anteriores sin JWT. El login solo está
-disponible en Development; no acredita una plataforma de identidad de producción
-ni requisitos adicionales de la tarea 2.4.
-
-
-## Resultado final de la fase JWT
-
-Verificación concluida correctamente:
-
-- API: 15 comprobaciones de autenticación; todas pasaron. Se probaron ausencia,
-  formato inválido, alteración, vencimiento, emisor y audiencia incorrectos.
-- Postman actualizado: 20 solicitudes y 29 aserciones, 0 fallos, exit code 0.
-- Android real en Pixel: login válido; Volley, OkHttp y Retrofit recibieron 200
-  consultando GET /api/registros con el token precargado de sesión.
-- Al borrar el campo JWT, cada cliente recibió 401 y mostró el mensaje de token
-  ausente/inválido/vencido sin cierre inesperado. La sesión de inicio de la app
-  sigue disponible; volver a abrir el laboratorio precarga otra vez el token.
-
-Evidencias: [API](evidencias/jwt-api.txt),
-[Android](evidencias/jwt-android.txt) y
-[Postman](evidencias/postman-api-jwt.txt).
-
-Los tiempos de esta comprobación NO son los promedios de cinco ejecuciones:
-solo acreditan autenticación. El listado estaba vacío, por lo que se verificó
-acceso protegido y cero registros; la comparación final debe mantener un conjunto
-de datos estable y documentar su cantidad.
-
-### Matriz 2.5 al cerrar JWT
-
-| Escenario | Volley | OkHttp | Retrofit |
-| --- | --- | --- | --- |
-| Token ausente (401) | Verificado | Verificado | Verificado |
-| API detenida | Pendiente en laboratorio | Pendiente en laboratorio | Probado en CRUD; repetir/documentar en laboratorio |
-| Modo avión | Pendiente en laboratorio | Pendiente en laboratorio | Probado en CRUD; repetir/documentar en laboratorio |
-| Tiempo de espera | Pendiente | Pendiente | Pendiente |
-| HTTP 500 | Pendiente en Android | Pendiente en Android | Pendiente en Android |
-
-Próxima fase: habilitar la selección de los endpoints de prueba en el laboratorio
-para timeout/500, completar los doce casos restantes y registrar cinco ejecuciones
-exitosas por cliente. Luego finalizar cuadro comparativo, recomendación, PDF,
-video y rama/commits/PR revisado. La fase actual no completa por sí sola la tarea.
-
-## Punto de continuación — pendientes de tarea 2.5
-
-Estado al pausar el trabajo, 11 de noviembre de 2026. Retomar esta noche desde
-esta lista. No iniciar nuevamente las fases ya verificadas salvo cambios o fallos.
-
-### Ya verificado
-
-- Laboratorio con Volley, OkHttp y Retrofit para GET /api/registros.
-- JWT local y login Android; mismo token compartido por los tres clientes.
-- Acceso exitoso autenticado y respuesta 401 al omitir el token en cada cliente.
-- Retrofit reutiliza el repositorio del CRUD MVVM.
-- API local, compilación e instalación Android funcionando en la última verificación.
-- Evidencias JWT: jwt-api.txt, jwt-android.txt y postman-api-jwt.txt en docs/evidencias.
-
-### Pendientes en orden
-
-- [ ] Preparar selección de escenarios del laboratorio: GET /api/registros para
-  consulta normal, /api/pruebas/demora para timeout y /api/pruebas/error para 500.
-  Los tres clientes deben consultar la misma ruta en cada escenario, con JWT
-  válido, y las rutas de prueba deben permanecer solo en Development.
-- [ ] API detenida: ejecutar Volley, OkHttp y Retrofit; registrar error técnico,
-  mensaje visible, duración, continuidad de la app y captura o Logcat.
-- [ ] Modo avión: ejecutar los tres clientes con Wi-Fi/datos realmente apagados;
-  guardar la misma evidencia y restaurar la conexión al terminar.
-- [ ] Timeout: ejecutar los tres clientes con espera configurada menor a los
-  15 segundos del endpoint de demora; documentar excepción y mensaje.
-- [ ] HTTP 500: ejecutar los tres clientes contra el fallo controlado y documentar
-  estado HTTP, mensaje y ausencia de cierre inesperado.
-- [ ] Consolidar las 15 pruebas de fallos en la tabla final: 3 casos 401 ya
-  verificados y 12 casos restantes. Las pruebas previas del CRUD Retrofit de API
-  detenida/modo avión no sustituyen la matriz completa del laboratorio.
-- [ ] Realizar cinco consultas exitosas por cliente: 15 mediciones en total,
-  mismo endpoint, token válido, dispositivo, timeout, condiciones de red y datos.
-  Registrar cantidad de registros y calcular tres promedios. Los tiempos aislados
-  de la verificación JWT no son esos promedios.
-- [ ] Completar cuadro comparativo: líneas de código con criterio de conteo
-  explícito, encabezados, JSON, hilo del callback, errores, reintentos/timeouts,
-  facilidad de prueba/mantenimiento y promedios de cinco ejecuciones.
-- [ ] Redactar recomendación final apoyada en el código y resultados reales.
-- [ ] Ordenar GitHub: llevar todo a feature/comparativa-melvin-pena sin perder
-  cambios, realizar commits descriptivos y preparar PR hacia principal con
-  revisión real de otro integrante. Verificar el estado antes de modificar ramas.
-- [ ] Preparar PDF individual con comparación, tabla de fallos, capturas/Logcat
-  y recomendación; no incluir contraseñas, claves ni JWT completos.
-- [ ] Grabar video individual de 3–4 minutos con cámara encendida: explicar
-  Volley y OkHttp con palabras propias y demostrar al menos dos fallos.
-- [ ] Verificar enlaces/archivos finales de PR, PDF y video para la entrega.
-
-### Cómo retomar
-
-1. Confirmar que la API local y el Pixel están disponibles; si la API está
-   detenida, seguir backend/README.md para iniciarla en Development.
-2. Iniciar sesión en Android si el proceso murió o el token de 15 minutos venció.
-   Consultar credenciales solo en backend/Bitacora.Api/.dev-login.json; no editar
-   ese archivo para cambiar la contraseña. El usuario decidió conservar la actual
-   y no añadir una opción de cambio.
-3. Empezar por la selección de endpoints de prueba y los doce casos pendientes.
-4. Agrupar compilación, instalación y verificaciones en acciones concretas para
-   reducir solicitudes de permisos. No repetir comprobaciones ya exitosas sin
-   un cambio, fallo o duda que lo justifique.
-
-La entrega sigue incompleta hasta finalizar las pruebas, mediciones y entregables.
-El dictado real por micrófono y otras verificaciones específicas de tarea 2.3
-son pendientes separados; no confundirlos con los requisitos de esta lista 2.5.
+Guion con capítulos: docs/GUION_VIDEO_DEMOSTRATIVO.md.
+Verificación de las peticiones: docs/evidencias/video-demostracion-logcat.txt.
+Generadores: scripts/record_android_demo.py y scripts/generate_demo_video.py.
+Se revisaron fotogramas, resolución, duración y presencia de audio.
+Video, guion y cambios nuevos permanecen locales; no se publican automáticamente.

@@ -1,0 +1,122 @@
+[
+  {
+    "escenario": "error-500",
+    "cliente": "Volley",
+    "logcat": "11-12 07:40:36.945  6078  6078 I ComparativaHTTP: ERROR | HTTP 500 | Volley: Error interno del servidor (500). (639 ms).",
+    "mensaje": "Volley: Error interno del servidor (500). (639 ms).",
+    "captura": "lab-error-500-volley.png",
+    "sin_cierre": true
+  },
+  {
+    "escenario": "error-500",
+    "cliente": "OkHttp",
+    "logcat": "11-12 07:40:44.938  6078  6078 I ComparativaHTTP: ERROR | HTTP 500 | OkHttp: Error interno del servidor (500). (754 ms).",
+    "mensaje": "OkHttp: Error interno del servidor (500). (754 ms).",
+    "captura": "lab-error-500-okhttp.png",
+    "sin_cierre": true
+  },
+  {
+    "escenario": "error-500",
+    "cliente": "Retrofit",
+    "logcat": "11-12 07:40:50.435  6078  6078 I ComparativaHTTP: ERROR | HTTP 500 | Retrofit: Error interno del servidor (500). (838 ms).",
+    "mensaje": "Retrofit: Error interno del servidor (500). (838 ms).",
+    "captura": "lab-error-500-retrofit.png",
+    "sin_cierre": true
+  },
+  {
+    "escenario": "timeout",
+    "cliente": "Volley",
+    "logcat": "11-12 07:41:02.723  6078  6078 I ComparativaHTTP: DEMORA | TimeoutError | Volley: Tiempo de espera agotado. (2015 ms).",
+    "mensaje": "Volley: Tiempo de espera agotado. (2015 ms).",
+    "captura": "lab-timeout-volley.png",
+    "sin_cierre": true
+  },
+  {
+    "escenario": "timeout",
+    "cliente": "OkHttp",
+    "logcat": "11-12 07:41:12.253  6078  6078 I ComparativaHTTP: DEMORA | SocketTimeoutException <- SocketTimeoutException | OkHttp: Tiempo de espera agotado. (2092 ms).",
+    "mensaje": "OkHttp: Tiempo de espera agotado. (2092 ms).",
+    "captura": "lab-timeout-okhttp.png",
+    "sin_cierre": true
+  },
+  {
+    "escenario": "timeout",
+    "cliente": "Retrofit",
+    "logcat": "11-12 07:41:19.256  6078  6078 I ComparativaHTTP: DEMORA | SocketTimeoutException | Retrofit: Tiempo de espera agotado. (2437 ms).",
+    "mensaje": "Retrofit: Tiempo de espera agotado. (2437 ms).",
+    "captura": "lab-timeout-retrofit.png",
+    "sin_cierre": true
+  },
+  {
+    "escenario": "api-detenida",
+    "cliente": "Volley",
+    "logcat": "11-12 07:41:29.701  6078  6078 I ComparativaHTTP: NORMAL | NoConnectionError <- ConnectException | Volley: No se pudo conectar con la API. Revisa la red y que el servidor esté activo. (143 ms).",
+    "mensaje": "Volley: No se pudo conectar con la API. Revisa la red y que el servidor esté activo. (143 ms).",
+    "captura": "lab-api-detenida-volley.png",
+    "sin_cierre": true
+  },
+  {
+    "escenario": "api-detenida",
+    "cliente": "OkHttp",
+    "logcat": "11-12 07:41:37.201  6078  6078 I ComparativaHTTP: NORMAL | ConnectException <- ConnectException <- ErrnoException | OkHttp: No se pudo conectar con la API. Revisa la red y que el servidor esté activo. (177 ms).",
+    "mensaje": "OkHttp: No se pudo conectar con la API. Revisa la red y que el servidor esté activo. (177 ms).",
+    "captura": "lab-api-detenida-okhttp.png",
+    "sin_cierre": true
+  },
+  {
+    "escenario": "api-detenida",
+    "cliente": "Retrofit",
+    "logcat": "11-12 07:41:42.200  6078  6078 I ComparativaHTTP: NORMAL | ConnectException | Retrofit: Sin conexión con la API. Revisa la red y el servidor. (206 ms).",
+    "mensaje": "Retrofit: Sin conexión con la API. Revisa la red y el servidor. (206 ms).",
+    "captura": "lab-api-detenida-retrofit.png",
+    "sin_cierre": true
+  },
+  {
+    "escenario": "sin-token-401",
+    "cliente": "Volley",
+    "logcat": "11-12 07:42:22.008  6078  6078 I ComparativaHTTP: NORMAL | HTTP 401 | Volley: Token ausente, inválido o vencido (401). (999 ms).",
+    "mensaje": "Volley: Token ausente, inválido o vencido (401). (999 ms).",
+    "captura": "lab-sin-token-401-volley.png",
+    "sin_cierre": true
+  },
+  {
+    "escenario": "sin-token-401",
+    "cliente": "OkHttp",
+    "logcat": "11-12 07:42:30.019  6078  6078 I ComparativaHTTP: NORMAL | HTTP 401 | OkHttp: Token ausente, inválido o vencido (401). (587 ms).",
+    "mensaje": "OkHttp: Token ausente, inválido o vencido (401). (587 ms).",
+    "captura": "lab-sin-token-401-okhttp.png",
+    "sin_cierre": true
+  },
+  {
+    "escenario": "sin-token-401",
+    "cliente": "Retrofit",
+    "logcat": "11-12 07:42:36.043  6078  6078 I ComparativaHTTP: NORMAL | HTTP 401 | Retrofit: Token ausente, inválido o vencido (401). (1006 ms).",
+    "mensaje": "Retrofit: Token ausente, inválido o vencido (401). (1006 ms).",
+    "captura": "lab-sin-token-401-retrofit.png",
+    "sin_cierre": true
+  },
+  {
+    "escenario": "modo-avion",
+    "cliente": "Volley",
+    "logcat": "11-12 07:42:59.657  6078  6078 I ComparativaHTTP: NORMAL | NoConnectionError <- ConnectException | Volley: No se pudo conectar con la API. Revisa la red y que el servidor esté activo. (38 ms).",
+    "mensaje": "Volley: No se pudo conectar con la API. Revisa la red y que el servidor esté activo. (38 ms).",
+    "captura": "lab-modo-avion-volley.png",
+    "sin_cierre": true
+  },
+  {
+    "escenario": "modo-avion",
+    "cliente": "OkHttp",
+    "logcat": "11-12 07:43:06.734  6078  6078 I ComparativaHTTP: NORMAL | ConnectException <- ConnectException <- ErrnoException | OkHttp: No se pudo conectar con la API. Revisa la red y que el servidor esté activo. (15 ms).",
+    "mensaje": "OkHttp: No se pudo conectar con la API. Revisa la red y que el servidor esté activo. (15 ms).",
+    "captura": "lab-modo-avion-okhttp.png",
+    "sin_cierre": true
+  },
+  {
+    "escenario": "modo-avion",
+    "cliente": "Retrofit",
+    "logcat": "11-12 07:43:11.372  6078  6078 I ComparativaHTTP: NORMAL | ConnectException | Retrofit: Sin conexión con la API. Revisa la red y el servidor. (37 ms).",
+    "mensaje": "Retrofit: Sin conexión con la API. Revisa la red y el servidor. (37 ms).",
+    "captura": "lab-modo-avion-retrofit.png",
+    "sin_cierre": true
+  }
+]
